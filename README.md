@@ -1,7 +1,6 @@
 # Kendo Core UI meteor-packages by theme
-===============
 
-Provides a simple way to pull in [Kendo UI core](https://github.com/telerik/kendo-ui-core) in Meteor by theme. 
+Provides a simple way to pull [Kendo UI core](https://github.com/telerik/kendo-ui-core) into Meteor by theme. 
 
 ## Usage
 
