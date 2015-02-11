@@ -1,6 +1,6 @@
 # Kendo Core UI Meteor Packages by theme
 
-Provides a simple way to pull [Kendo UI core](https://github.com/telerik/kendo-ui-core) into Meteor by theme. Includes both Kendo UI and specific theme.
+Provides a simple way to pull [Kendo UI core](https://github.com/telerik/kendo-ui-core) into Meteor by theme. Includes both Kendo UI core and specific theme.
 
 ## Usage
 
@@ -8,7 +8,7 @@ Provides a simple way to pull [Kendo UI core](https://github.com/telerik/kendo-u
 $ meteor add telerik:kendo-ui-core-default-theme
 ```
 
-## Several packages are available by theme (include Kendo UI core too) 
+## Other packages available, only different being theme:
 
 ```
 $ meteor add telerik:kendo-ui-core-black-theme
