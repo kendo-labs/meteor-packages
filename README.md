@@ -2,6 +2,8 @@
 
 Provides a simple way to pull [Kendo UI core](https://github.com/telerik/kendo-ui-core) into Meteor by theme. Includes both Kendo UI core and specific theme.
 
+You can view all the themes here: [http://demos.telerik.com/kendo-ui/themebuilder/](http://demos.telerik.com/kendo-ui/themebuilder/)
+
 ## Usage (i.e. run from a terminal using the meteor CLI)
 
 ```
@@ -39,4 +41,8 @@ $ meteor add telerik:kendo-ui-core-materialblack-theme
 
 ```
 
-Note: use one package, per Meteor application
+Notes: 
+
+* use one package, per Meteor application
+* all mobile themes are being included
+* bootstrap package is not a dependency of the Kendo UI core bootstrap theme you'll have to add it i.e. ```$ meteor add twbs:bootstrap```
