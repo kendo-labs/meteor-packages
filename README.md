@@ -10,6 +10,8 @@ $ meteor add telerik:kendo-ui-core-default-theme
 
 ## Other packages available, only different being theme:
 
+Note: use one package, per Meteor application
+
 ```
 $ meteor add telerik:kendo-ui-core-black-theme
 
