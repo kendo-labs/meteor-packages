@@ -17,13 +17,13 @@ Package.onUse(function (api) {
 
   //css
 
-  api.add_files('telerik.kendoui.core/src/styles/web/kendo.common.core.css', 'client');
+  api.add_files('telerik.kendoui.core/styles/kendo.common.min.css', 'client');
 
-  api.add_files('telerik.kendoui.core/src/styles/web/kendo.black.css', 'client');
+  api.add_files('telerik.kendoui.core/styles/kendo.black.min.css', 'client');
 
   //mobile css
 
-  api.add_files('telerik.kendoui.core/src/styles/mobile/kendo.mobile.all.css', 'client');
+  api.add_files('telerik.kendoui.core/styles/kendo.mobile.all.min.css', 'client');
 
   //global CSS fonts
 
