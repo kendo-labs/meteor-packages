@@ -1,7 +1,7 @@
 Package.describe({
   name: "telerik:kendo-ui-core-default-theme",
   summary: "Kendo UI Core is the free & open-source version of Kendo UI, the web's best UI widgets!",
-  version: "1119.0.11",
+  version: "1119.0.13",
   git: 'https://github.com/kendo-labs/meteor-packages.git',
   documentation:'README.md'
 });
@@ -23,7 +23,7 @@ Package.onUse(function (api) {
 
   //mobile css
 
-  api.add_files('telerik.kendoui.core/styles/kendo.mobile.all.min.css', 'client');
+  api.add_files('telerik.kendoui.core/src/styles/mobile/kendo.mobile.all.css', 'client');
 
   //global CSS fonts
 
@@ -47,62 +47,62 @@ Package.onUse(function (api) {
 
   //global CSS textures
 
-  api.add_files('telerik.kendoui.core/src/styles/web/textures/brushed-metal.png', 'client');
-  api.add_files('telerik.kendoui.core/src/styles/web/textures/dots1.png', 'client');
-  api.add_files('telerik.kendoui.core/src/styles/web/textures/dots2.png', 'client');
-  api.add_files('telerik.kendoui.core/src/styles/web/textures/dots3.png', 'client');
-  api.add_files('telerik.kendoui.core/src/styles/web/textures/dots4.png', 'client');
-  api.add_files('telerik.kendoui.core/src/styles/web/textures/dots5.png', 'client');
-  api.add_files('telerik.kendoui.core/src/styles/web/textures/dots6.png', 'client');
-  api.add_files('telerik.kendoui.core/src/styles/web/textures/dots7.png', 'client');
-  api.add_files('telerik.kendoui.core/src/styles/web/textures/dots8.png', 'client');
-  api.add_files('telerik.kendoui.core/src/styles/web/textures/dots9.png', 'client');
-  api.add_files('telerik.kendoui.core/src/styles/web/textures/dots10.png', 'client');
-  api.add_files('telerik.kendoui.core/src/styles/web/textures/dots11.png', 'client');
-  api.add_files('telerik.kendoui.core/src/styles/web/textures/dots12.png', 'client');
-  api.add_files('telerik.kendoui.core/src/styles/web/textures/dots13.png', 'client');
+  api.add_files('telerik.kendoui.core/styles/textures/brushed-metal.png', 'client');
+  api.add_files('telerik.kendoui.core/styles/textures/dots1.png', 'client');
+  api.add_files('telerik.kendoui.core/styles/textures/dots2.png', 'client');
+  api.add_files('telerik.kendoui.core/styles/textures/dots3.png', 'client');
+  api.add_files('telerik.kendoui.core/styles/textures/dots4.png', 'client');
+  api.add_files('telerik.kendoui.core/styles/textures/dots5.png', 'client');
+  api.add_files('telerik.kendoui.core/styles/textures/dots6.png', 'client');
+  api.add_files('telerik.kendoui.core/styles/textures/dots7.png', 'client');
+  api.add_files('telerik.kendoui.core/styles/textures/dots8.png', 'client');
+  api.add_files('telerik.kendoui.core/styles/textures/dots9.png', 'client');
+  api.add_files('telerik.kendoui.core/styles/textures/dots10.png', 'client');
+  api.add_files('telerik.kendoui.core/styles/textures/dots11.png', 'client');
+  api.add_files('telerik.kendoui.core/styles/textures/dots12.png', 'client');
+  api.add_files('telerik.kendoui.core/styles/textures/dots13.png', 'client');
 
-  api.add_files('telerik.kendoui.core/src/styles/web/textures/glass-lighter.png', 'client');
-  api.add_files('telerik.kendoui.core/src/styles/web/textures/glass.png', 'client');
-  api.add_files('telerik.kendoui.core/src/styles/web/textures/highlight.png', 'client');
-  api.add_files('telerik.kendoui.core/src/styles/web/textures/hsv-gradient.png', 'client');
-  api.add_files('telerik.kendoui.core/src/styles/web/textures/hue.png', 'client');
-  api.add_files('telerik.kendoui.core/src/styles/web/textures/leather1.png', 'client');
-  api.add_files('telerik.kendoui.core/src/styles/web/textures/leather2.png', 'client');
-  api.add_files('telerik.kendoui.core/src/styles/web/textures/noise.png', 'client');
-  api.add_files('telerik.kendoui.core/src/styles/web/textures/stripe1.png', 'client');
-  api.add_files('telerik.kendoui.core/src/styles/web/textures/stripe2.png', 'client');
-  api.add_files('telerik.kendoui.core/src/styles/web/textures/stripe3.png', 'client');
-  api.add_files('telerik.kendoui.core/src/styles/web/textures/stripe4.png', 'client');
-  api.add_files('telerik.kendoui.core/src/styles/web/textures/stripe5.png', 'client');
-  api.add_files('telerik.kendoui.core/src/styles/web/textures/stripe6.png', 'client');
-  api.add_files('telerik.kendoui.core/src/styles/web/textures/transparency.png', 'client');
-  api.add_files('telerik.kendoui.core/src/styles/web/textures/transtexture.png', 'client');
+  api.add_files('telerik.kendoui.core/styles/textures/glass-lighter.png', 'client');
+  api.add_files('telerik.kendoui.core/styles/textures/glass.png', 'client');
+  api.add_files('telerik.kendoui.core/styles/textures/highlight.png', 'client');
+  api.add_files('telerik.kendoui.core/styles/textures/hsv-gradient.png', 'client');
+  api.add_files('telerik.kendoui.core/styles/textures/hue.png', 'client');
+  api.add_files('telerik.kendoui.core/styles/textures/leather1.png', 'client');
+  api.add_files('telerik.kendoui.core/styles/textures/leather2.png', 'client');
+  api.add_files('telerik.kendoui.core/styles/textures/noise.png', 'client');
+  api.add_files('telerik.kendoui.core/styles/textures/stripe1.png', 'client');
+  api.add_files('telerik.kendoui.core/styles/textures/stripe2.png', 'client');
+  api.add_files('telerik.kendoui.core/styles/textures/stripe3.png', 'client');
+  api.add_files('telerik.kendoui.core/styles/textures/stripe4.png', 'client');
+  api.add_files('telerik.kendoui.core/styles/textures/stripe5.png', 'client');
+  api.add_files('telerik.kendoui.core/styles/textures/stripe6.png', 'client');
+  api.add_files('telerik.kendoui.core/styles/textures/transparency.png', 'client');
+  api.add_files('telerik.kendoui.core/styles/textures/transtexture.png', 'client');
 
   //theme
 
-  api.add_files('telerik.kendoui.core/src/styles/web/Default/editor.png', 'client');
+  api.add_files('telerik.kendoui.core/styles/Default/editor.png', 'client');
 
-  api.add_files('telerik.kendoui.core/src/styles/web/Default/imagebrowser.png', 'client');
+  api.add_files('telerik.kendoui.core/styles/Default/imagebrowser.png', 'client');
 
-  api.add_files('telerik.kendoui.core/src/styles/web/Default/indeterminate.gif', 'client');
+  api.add_files('telerik.kendoui.core/styles/Default/indeterminate.gif', 'client');
 
-  api.add_files('telerik.kendoui.core/src/styles/web/Default/loading-image.gif', 'client');
+  api.add_files('telerik.kendoui.core/styles/Default/loading-image.gif', 'client');
 
-  api.add_files('telerik.kendoui.core/src/styles/web/Default/loading.gif', 'client');
+  api.add_files('telerik.kendoui.core/styles/Default/loading.gif', 'client');
 
-  api.add_files('telerik.kendoui.core/src/styles/web/Default/loading_2x.gif', 'client');
+  api.add_files('telerik.kendoui.core/styles/Default/loading_2x.gif', 'client');
 
-  api.add_files('telerik.kendoui.core/src/styles/web/Default/slider-h.gif', 'client');
+  api.add_files('telerik.kendoui.core/styles/Default/slider-h.gif', 'client');
 
-  api.add_files('telerik.kendoui.core/src/styles/web/Default/slider-v.gif', 'client');
+  api.add_files('telerik.kendoui.core/styles/Default/slider-v.gif', 'client');
 
-  api.add_files('telerik.kendoui.core/src/styles/web/Default/sprite.png', 'client');
+  api.add_files('telerik.kendoui.core/styles/Default/sprite.png', 'client');
 
-  api.add_files('telerik.kendoui.core/src/styles/web/Default/sprite_2x.png', 'client');
+  api.add_files('telerik.kendoui.core/styles/Default/sprite_2x.png', 'client');
 
-  api.add_files('telerik.kendoui.core/src/styles/web/Default/sprite_kpi.png', 'client');
+  api.add_files('telerik.kendoui.core/styles/Default/sprite_kpi.png', 'client');
 
-  api.add_files('telerik.kendoui.core/src/styles/web/Default/sprite_kpi_2x.png', 'client');
+  api.add_files('telerik.kendoui.core/styles/Default/sprite_kpi_2x.png', 'client');
 
 });
