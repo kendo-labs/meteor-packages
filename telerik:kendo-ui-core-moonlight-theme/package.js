@@ -1,7 +1,7 @@
 Package.describe({
   name: "telerik:kendo-ui-core-moonlight-theme",
   summary: "Kendo UI Core is the free & open-source version of Kendo UI, the web's best UI widgets!",
-  version: "1119.0.13",
+  version: "2015.1.318",
   git: 'https://github.com/kendo-labs/meteor-packages.git',
   documentation:'README.md'
 });
@@ -13,7 +13,7 @@ Package.onUse(function (api) {
 
   //js
 
-  api.add_files('telerik.kendoui.core/src/src/kendo.ui.core.js', 'client');
+  api.add_files('telerik.kendoui.core/src/js/kendo.ui.core.js', 'client');
 
   //css
 

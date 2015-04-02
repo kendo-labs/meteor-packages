@@ -498,9 +498,23 @@
     border-color: @android-light-background-color;
 }
 
-.km-android-light .km-modalview .km-view-title
+/* Collapsible */
+
+.km-android .km-collapsible-header,
+.km-android .km-collapsible-content
 {
-    .box-shadow(inset 0 -2px fade(@android-light-main-color, 10%));
+    border-color: @android-dark-border-color;
+}
+
+.km-android-light .km-collapsible-header,
+.km-android-light .km-collapsible-content
+{
+    border-color: @android-light-border-color;
+}
+
+.km-android .km-collapsible-header .km-icon
+{
+    color: @android-gray;
 }
 
 /* Tablet Styles */
@@ -509,9 +523,6 @@
 {
     .box-shadow(0 0 7px @android-button-color);
 }
-
-
-
 
 /* Active States */
 

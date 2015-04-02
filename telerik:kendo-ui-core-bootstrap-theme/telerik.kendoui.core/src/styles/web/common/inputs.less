@@ -378,7 +378,8 @@ body .k-datetimepicker .k-select
     border-width: 1px;
 }
 
-.k-popup .k-item
+.k-popup .k-item,
+.k-list-optionlabel
 {
     cursor: default;
 }
@@ -394,11 +395,18 @@ body .k-datetimepicker .k-select
 }
 
 .k-popup .k-list .k-item,
-.k-fieldselector .k-list .k-item
+.k-fieldselector .k-list .k-item,
+.k-list-optionlabel,
+.k-popup > .k-static-header
 {
     padding: 1px 5px 1px 5px;
     line-height: 1.8em;
     min-height: 1.8em;
+}
+
+.k-popup > .k-static-header
+{
+    padding-right: 22px;
 }
 
 .k-overflow-container .k-item
@@ -406,6 +414,7 @@ body .k-datetimepicker .k-select
     padding: 1px;
 }
 
+.k-overflow-container > .k-state-disabled .k-button,
 .k-overflow-container .k-button.k-state-disabled,
 .k-overflow-container .k-button.k-state-disabled:hover
 {
@@ -419,7 +428,9 @@ body .k-datetimepicker .k-select
 .k-overflow-container .k-state-hover,
 .k-overflow-container .k-state-focused,
 .k-overflow-container .k-state-selected,
-.k-fieldselector .k-list .k-item
+.k-fieldselector .k-list .k-item,
+.k-list-optionlabel.k-state-focused,
+.k-list-optionlabel.k-state-selected
 {
     padding: 0 4px;
     border-width: 1px;
@@ -550,13 +561,13 @@ body .k-datetimepicker .k-select
 {
     outline: 0;
     padding: 2px .3em;
-    line-height: 1.6em;
 }
 
 input.k-textbox
 {
     height: (@input-height + 0.48em);
     text-indent: @input-indent;
+    line-height: 1.6em;
 }
 
 .k-ie input.k-textbox

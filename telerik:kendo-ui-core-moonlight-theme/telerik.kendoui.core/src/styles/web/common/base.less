@@ -505,6 +505,14 @@ html body .k-button-bare.k-upload-button:hover
     background-position: 0 -16px;
 }
 
+/* Dropdown icon in k-scheduler-views */
+
+.k-pager-numbers .k-current-page .k-link:after,
+.k-scheduler-toolbar > ul.k-scheduler-views > li.k-current-view .k-link:after {
+    .sprite-hoverable(0, 2);
+}
+
+
 /* Colors */
 
 html .k-success-colored
@@ -669,6 +677,14 @@ html .k-error-colored
     overflow-x:auto; /*needed by IE8*/
 }
 
+/* current time indicator */
+
+.k-current-time
+{
+    background: #f00;
+    position: absolute;
+}
+
 /* override box sizing for grid layout framework integration (Bootstrap 3, Foundation 4) */
 
 .k-animation-container,
@@ -724,10 +740,15 @@ a.k-button:hover
     background-clip: border-box;
 }
 
-//Checkboxes
-.k-checkbox, 
+// styled checkboxes
+// changes here may reflect in treeview span.k-checkbox>input[type=checkbox]
+input.k-checkbox,
 .k-radio {
-  display: none;
+    display: inline;
+    opacity: 0;
+    width: 0;
+    margin: 0;
+    position: absolute;
 }
 
 .k-checkbox-label {
@@ -765,7 +786,7 @@ a.k-button:hover
   width: 1em;
   height: 1em;
   position: absolute;
-  top: 0; 
+  top: 0;
   left: 0;
   border-width: 1px;
   border-style: solid;
@@ -800,7 +821,7 @@ a.k-button:hover
   width: 10px;
   height: 10px;
   position: absolute;
-  top: 3px; 
+  top: 3px;
   left: 3px
 }
 
@@ -808,8 +829,50 @@ a.k-button:hover
    cursor: auto;
 }
 
+// Remove Checkboxes / Radio buttons styling for IE 8
+.k-ie8 input.k-checkbox,
+.k-ie8 .k-radio {
+    display: inline-block;
+    width: auto;
+}
+
+.k-ie8 .k-checkbox-label,
+.k-ie8 .k-radio-label {
+    padding-left: 0;
+}
+
+.k-ie8 .k-checkbox-label:before,
+.k-ie8 .k-checkbox-label:after,
+.k-ie8 .k-radio-label:before,
+.k-ie8 .k-radio-label:after {
+    display: none;
+}
+
+/* RTL for checkboxes and radio buttons */
+.k-rtl .k-checkbox-label,
+.k-rtl .k-radio-label {
+    padding-right: 1.5em;
+}
+
+.k-rtl .k-checkbox-label:before,
+.k-rtl .k-checkbox-label:after,
+.k-rtl .k-radio-label:before {
+    right: 0;
+}
+
+.k-rtl .k-radio:checked + .k-radio-label:after {
+    right: 3px;
+}
+
 // Avoid double-click bug with checkbox + label combination in Google Chrome
 input.k-checkbox + label{
     -webkit-user-select:none;
     user-select:none;
+}
+
+/* Off-screen container used during export */
+.k-pdf-export-shadow {
+    position: absolute;
+    overflow: visible;
+    left: -10000px;
 }

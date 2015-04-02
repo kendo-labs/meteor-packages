@@ -39,6 +39,8 @@ $ meteor add telerik:kendo-ui-core-material-theme
 
 $ meteor add telerik:kendo-ui-core-materialblack-theme
 
+$ meteor add telerik:kendo-ui-core-fiori-theme
+
 ```
 
 Notes: 

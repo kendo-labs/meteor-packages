@@ -1,5 +1,5 @@
 /**
- * Copyright 2014 Telerik AD
+ * Copyright 2015 Telerik AD
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,15 +68,15 @@
   z-index: 2 !important;
   -webkit-transition: -webkit-transform 350ms ease-out;
   -ms-transition: -ms-transform 350ms ease-out;
+  -o-transition: -o-transform 350ms ease-out;
+  transition: transform 350ms ease-out;
   -webkit-transform: translatex(-100%);
-  -moz-transform: translatex(-100%);
   -ms-transform: translatex(-100%);
   -o-transform: translatex(-100%);
   transform: translatex(-100%);
 }
 .km-vertical .km-expanded-splitview .km-collapsible-pane {
   -webkit-transform: translatex(0);
-  -moz-transform: translatex(0);
   -ms-transform: translatex(0);
   -o-transform: translatex(0);
   transform: translatex(0);
@@ -313,7 +313,6 @@ kendo-mobile-drawer {
 .km-load-more .km-icon,
 .km-scroller-refresh .km-icon {
   animation: km-spin 1s infinite linear;
-  -moz-animation: km-spin 1s infinite linear;
   -webkit-animation: km-spin 1s infinite linear;
   display: block;
   margin: 0 auto;
@@ -437,9 +436,13 @@ kendo-mobile-drawer {
   -webkit-transform: none;
   overflow-x: visible;
 }
+.km-native-scrolling,
 .km-native-scrolling .km-pane,
 .km-native-scrolling .km-view {
   -ms-touch-action: auto;
+}
+.km-native-scrolling .km-pane,
+.km-native-scrolling .km-view {
   display: block;
 }
 .km-native-scrolling .km-content {
@@ -668,6 +671,90 @@ button.km-button {
 .km-ios .km-buttongroup .km-button {
   font-size: 1.2em;
   font-weight: bold;
+}
+.km-collapsible {
+  margin: 1em 0;
+}
+.km-collapsible.km-collapsibleinset {
+  margin: 1em;
+}
+.km-collapsible + .km-collapsible {
+  margin-top: -1em;
+}
+.km-collapsible-header {
+  position: relative;
+  border-style: solid;
+  border-width: 1px 0;
+  padding: .4em 20px;
+}
+.km-collapsibleinset > .km-collapsible-header {
+  border-width: 1px;
+}
+.km-collapsible + .km-collapsible > .km-collapsible-header {
+  border-top-width: 0;
+}
+.km-collapsibleinset.km-collapsed > .km-collapsible-header {
+  border-radius: .5em;
+}
+.km-collapsibleinset.km-expanded > .km-collapsible-header {
+  border-radius: .5em .5em 0 0;
+}
+.km-collapsible-header .km-icon {
+  display: inline-block;
+  font-size: .8em;
+  margin-right: .3em;
+}
+.km-collapsible-header > h1,
+.km-collapsible-header > h2,
+.km-collapsible-header > h3,
+.km-collapsible-header > h4,
+.km-collapsible-header > h5,
+.km-collapsible-header > h6 {
+  margin: 0;
+}
+.km-collapsible-content {
+  border-style: solid;
+  border-width: 1px 0;
+  border-top: 0;
+  padding: .4em;
+  overflow: hidden;
+}
+.km-collapsible-header .km-arrow-s,
+.km-collapsible-header .km-arrow-n {
+  position: absolute;
+  top: .4em;
+}
+.km-icon-left .km-arrow-s,
+.km-icon-left .km-arrow-n {
+  left: .2em;
+}
+.km-icon-right .km-arrow-s,
+.km-icon-right .km-arrow-n {
+  left: auto;
+  right: .2em;
+}
+.km-icon-top .km-arrow-s,
+.km-icon-top .km-arrow-n {
+  position: static;
+  display: block;
+  margin: 0 auto;
+  width: 1em;
+}
+.km-collapsibleinset > .km-collapsible-content {
+  border-radius: 0 0 .5em .5em;
+  border-width: 1px;
+}
+.km-collapsed > .km-collapsible-content.km-animated {
+  transform: translateY(-0.8em);
+  border-color: transparent;
+  border-bottom: none;
+  visibility: hidden;
+}
+.km-animated {
+  -webkit-transition: -webkit-all 0.2s ease-in-out;
+  -ms-transition: -ms-all 0.2s ease-in-out;
+  -o-transition: -o-all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
 .km-hide-title {
   display: none;
@@ -1078,7 +1165,6 @@ button.km-button {
   border-style: solid;
   border-width: .24rem .24rem 0 0;
   -webkit-transform: rotate(45deg);
-  -moz-transform: rotate(45deg);
   -ms-transform: rotate(45deg);
   -o-transform: rotate(45deg);
   transform: rotate(45deg);
@@ -1189,7 +1275,6 @@ button.km-button {
   border: 1px solid transparent;
   border-width: 1px 0;
   -webkit-transform: translatez(0);
-  -moz-transform: translatez(0);
   -ms-transform: translatez(0);
   -o-transform: translatez(0);
   transform: translatez(0);
@@ -1265,7 +1350,6 @@ button.km-button {
   font-size: 1.4em;
   text-align: center;
   -webkit-transform: translate3d(0, -3em, 0);
-  -moz-transform: translate3d(0, -3em, 0);
   -ms-transform: translate3d(0, -3em, 0);
   -o-transform: translate3d(0, -3em, 0);
   transform: translate3d(0, -3em, 0);
@@ -1284,26 +1368,22 @@ button.km-button {
   width: 2rem;
   font-size: 2rem;
   -webkit-transform: rotate(0deg);
-  -moz-transform: rotate(0deg);
   -ms-transform: rotate(0deg);
   -o-transform: rotate(0deg);
   transform: rotate(0deg);
   -webkit-transition: -webkit-transform 300ms linear;
-  -moz-transition: -moz-transform 300ms linear;
   -ms-transition: -ms-transform 300ms linear;
   -o-transition: -o-transform 300ms linear;
   transition: transform 300ms linear;
 }
 .km-widget .km-scroller-release .km-icon {
   -webkit-transform: rotate(180deg);
-  -moz-transform: rotate(180deg);
   -ms-transform: rotate(180deg);
   -o-transform: rotate(180deg);
   transform: rotate(180deg);
 }
 .km-widget .km-scroller-refresh .km-icon {
   -webkit-transition: none;
-  -moz-transition: none;
   -ms-transition: none;
   -o-transition: none;
   transition: none;
@@ -1318,12 +1398,10 @@ button.km-button {
   background-color: #333;
   opacity: 0;
   -webkit-transform-origin: 0 0;
-  -moz-transform-origin: 0 0;
   -ms-transform-origin: 0 0;
   -o-transform-origin: 0 0;
   transform-origin: 0 0;
   -webkit-transition: opacity 0.3s linear;
-  -moz-transition: opacity 0.3s linear;
   -ms-transition: opacity 0.3s linear;
   -o-transition: opacity 0.3s linear;
   transition: opacity 0.3s linear;
@@ -1461,7 +1539,7 @@ button.km-button {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 10000;
+  z-index: 10002;
 }
 .km-popup-arrow,
 .km-popup-arrow:after,
@@ -1512,7 +1590,8 @@ button.km-button {
   -ms-flex: auto;
 }
 /* SplitView */
-.km-splitview > .km-content {
+div.km-splitview > .km-content,
+kendo-mobile-split-view.km-splitview > .km-content {
   -moz-box-orient: horizontal;
   -webkit-box-orient: horizontal;
   -moz-box-direction: normal;
@@ -1521,14 +1600,15 @@ button.km-button {
   -ms-flex-direction: row;
   flex-direction: row;
 }
-.km-split-vertical > .km-content {
+div.km-split-vertical > .km-content,
+kendo-mobile-split-view.km-split-vertical > .km-content {
   -moz-box-orient: vertical;
   -webkit-box-orient: vertical;
   -webkit-flex-direction: column;
   -ms-flex-direction: column;
   flex-direction: column;
 }
-.km-split-content > .km-pane {
+div.km-split-content > .km-pane {
   -moz-box-flex: 2;
   -webkit-box-flex: 2;
   -webkit-flex: 2;
@@ -1537,14 +1617,14 @@ button.km-button {
   width: auto;
   height: auto;
 }
-.km-split-content > .km-pane:first-child {
+div.km-split-content > .km-pane:first-child {
   -moz-box-flex: 1;
   -webkit-box-flex: 1;
   -webkit-flex: 1;
   -ms-flex: 1;
   flex: 1;
 }
-.km-split-horizontal > .km-content > .km-pane {
+div.km-split-horizontal > .km-content > .km-pane {
   top: 0;
   bottom: 0;
 }
@@ -1836,7 +1916,6 @@ button.km-button {
 .k-fx-end .k-fx-next,
 .k-fx-end .k-fx-current {
   -webkit-transition: all 350ms ease-out;
-  -moz-transition: all 350ms ease-out;
   -ms-transition: all 350ms ease-out;
   -o-transition: all 350ms ease-out;
   transition: all 350ms ease-out;
@@ -1854,10 +1933,6 @@ button.km-button {
 .k-fx-hidden * {
   visibility: hidden !important;
 }
-.k-fx-hidden .km-view-title {
-  visibility: visible !important;
-  opacity: 0;
-}
 .k-fx-reverse .k-fx-current {
   z-index: 1;
 }
@@ -1867,14 +1942,12 @@ button.km-button {
 /* Zoom */
 .k-fx-zoom.k-fx-start .k-fx-next {
   -webkit-transform: scale(0) !important;
-  -moz-transform: scale(0) !important;
   -ms-transform: scale(0) !important;
   -o-transform: scale(0) !important;
   transform: scale(0) !important;
 }
 .k-fx-zoom.k-fx-end .k-fx-next {
   -webkit-transform: scale(1) !important;
-  -moz-transform: scale(1) !important;
   -ms-transform: scale(1) !important;
   -o-transform: scale(1) !important;
   transform: scale(1) !important;
@@ -1882,21 +1955,18 @@ button.km-button {
 .k-fx-zoom.k-fx-reverse.k-fx-start .k-fx-next,
 .k-fx-zoom.k-fx-reverse.k-fx-end .k-fx-next {
   -webkit-transform: scale(1) !important;
-  -moz-transform: scale(1) !important;
   -ms-transform: scale(1) !important;
   -o-transform: scale(1) !important;
   transform: scale(1) !important;
 }
 .k-fx-zoom.k-fx-reverse.k-fx-start .k-fx-current {
   -webkit-transform: scale(1) !important;
-  -moz-transform: scale(1) !important;
   -ms-transform: scale(1) !important;
   -o-transform: scale(1) !important;
   transform: scale(1) !important;
 }
 .k-fx-zoom.k-fx-reverse.k-fx-end .k-fx-current {
   -webkit-transform: scale(0) !important;
-  -moz-transform: scale(0) !important;
   -ms-transform: scale(0) !important;
   -o-transform: scale(0) !important;
   transform: scale(0) !important;
@@ -1929,7 +1999,6 @@ button.km-button {
 .k-fx-slide.k-fx-end .k-fx-current .km-header,
 .k-fx-slide.k-fx-end .k-fx-current .km-footer {
   -webkit-transition: all 350ms ease-out;
-  -moz-transition: all 350ms ease-out;
   -ms-transition: all 350ms ease-out;
   -o-transition: all 350ms ease-out;
   transition: all 350ms ease-out;
@@ -1937,7 +2006,6 @@ button.km-button {
 .k-fx-slide.k-fx-start .k-fx-next .km-content {
   will-change: transform;
   -webkit-transform: translatex(100%);
-  -moz-transform: translatex(100%);
   -ms-transform: translatex(100%);
   -o-transform: translatex(100%);
   transform: translatex(100%);
@@ -1949,7 +2017,6 @@ button.km-button {
 }
 .k-fx-slide.k-fx-end .k-fx-current .km-content {
   -webkit-transform: translatex(-100%);
-  -moz-transform: translatex(-100%);
   -ms-transform: translatex(-100%);
   -o-transform: translatex(-100%);
   transform: translatex(-100%);
@@ -1961,28 +2028,24 @@ button.km-button {
 .k-fx-slide.k-fx-reverse.k-fx-start .k-fx-current .km-content {
   will-change: transform;
   -webkit-transform: translatex(0);
-  -moz-transform: translatex(0);
   -ms-transform: translatex(0);
   -o-transform: translatex(0);
   transform: translatex(0);
 }
 .k-fx-slide.k-fx-reverse.k-fx-end .k-fx-current .km-content {
   -webkit-transform: translatex(100%);
-  -moz-transform: translatex(100%);
   -ms-transform: translatex(100%);
   -o-transform: translatex(100%);
   transform: translatex(100%);
 }
 .k-fx-slide.k-fx-reverse.k-fx-start .k-fx-next .km-content {
   -webkit-transform: translatex(-100%);
-  -moz-transform: translatex(-100%);
   -ms-transform: translatex(-100%);
   -o-transform: translatex(-100%);
   transform: translatex(-100%);
 }
 .k-fx-slide.k-fx-reverse.k-fx-end .k-fx-next .km-content {
   -webkit-transform: translatex(0);
-  -moz-transform: translatex(0);
   -ms-transform: translatex(0);
   -o-transform: translatex(0);
   transform: translatex(0);
@@ -2009,42 +2072,36 @@ button.km-button {
 }
 .k-fx-slide.k-fx-right.k-fx-start .k-fx-next .km-content {
   -webkit-transform: translatex(-100%);
-  -moz-transform: translatex(-100%);
   -ms-transform: translatex(-100%);
   -o-transform: translatex(-100%);
   transform: translatex(-100%);
 }
 .k-fx-slide.k-fx-right.k-fx-end .k-fx-current .km-content {
   -webkit-transform: translatex(100%);
-  -moz-transform: translatex(100%);
   -ms-transform: translatex(100%);
   -o-transform: translatex(100%);
   transform: translatex(100%);
 }
 .k-fx-slide.k-fx-right.k-fx-reverse.k-fx-start .k-fx-current .km-content {
   -webkit-transform: translatex(0);
-  -moz-transform: translatex(0);
   -ms-transform: translatex(0);
   -o-transform: translatex(0);
   transform: translatex(0);
 }
 .k-fx-slide.k-fx-right.k-fx-reverse.k-fx-end .k-fx-current .km-content {
   -webkit-transform: translatex(-100%);
-  -moz-transform: translatex(-100%);
   -ms-transform: translatex(-100%);
   -o-transform: translatex(-100%);
   transform: translatex(-100%);
 }
 .k-fx-slide.k-fx-right.k-fx-reverse.k-fx-start .k-fx-next .km-content {
   -webkit-transform: translatex(100%);
-  -moz-transform: translatex(100%);
   -ms-transform: translatex(100%);
   -o-transform: translatex(100%);
   transform: translatex(100%);
 }
 .k-fx-slide.k-fx-right.k-fx-reverse.k-fx-end .k-fx-next .km-content {
   -webkit-transform: translatex(0%);
-  -moz-transform: translatex(0%);
   -ms-transform: translatex(0%);
   -o-transform: translatex(0%);
   transform: translatex(0%);
@@ -2058,14 +2115,12 @@ button.km-button {
 .k-fx-tile.k-fx-start .k-fx-next {
   will-change: transform;
   -webkit-transform: translatex(100%);
-  -moz-transform: translatex(100%);
   -ms-transform: translatex(100%);
   -o-transform: translatex(100%);
   transform: translatex(100%);
 }
 .k-fx-tile.k-fx-end .k-fx-current {
   -webkit-transform: translatex(-100%);
-  -moz-transform: translatex(-100%);
   -ms-transform: translatex(-100%);
   -o-transform: translatex(-100%);
   transform: translatex(-100%);
@@ -2073,28 +2128,24 @@ button.km-button {
 .k-fx-tile.k-fx-reverse.k-fx-start .k-fx-current {
   will-change: transform;
   -webkit-transform: translatex(0);
-  -moz-transform: translatex(0);
   -ms-transform: translatex(0);
   -o-transform: translatex(0);
   transform: translatex(0);
 }
 .k-fx-tile.k-fx-reverse.k-fx-end .k-fx-current {
   -webkit-transform: translatex(100%);
-  -moz-transform: translatex(100%);
   -ms-transform: translatex(100%);
   -o-transform: translatex(100%);
   transform: translatex(100%);
 }
 .k-fx-tile.k-fx-reverse.k-fx-start .k-fx-next {
   -webkit-transform: translatex(-100%);
-  -moz-transform: translatex(-100%);
   -ms-transform: translatex(-100%);
   -o-transform: translatex(-100%);
   transform: translatex(-100%);
 }
 .k-fx-tile.k-fx-reverse.k-fx-end .k-fx-next {
   -webkit-transform: translatex(0);
-  -moz-transform: translatex(0);
   -ms-transform: translatex(0);
   -o-transform: translatex(0);
   transform: translatex(0);
@@ -2104,42 +2155,36 @@ button.km-button {
 }
 .k-fx-tile.k-fx-right.k-fx-start .k-fx-next {
   -webkit-transform: translatex(-100%);
-  -moz-transform: translatex(-100%);
   -ms-transform: translatex(-100%);
   -o-transform: translatex(-100%);
   transform: translatex(-100%);
 }
 .k-fx-tile.k-fx-right.k-fx-end .k-fx-current {
   -webkit-transform: translatex(100%);
-  -moz-transform: translatex(100%);
   -ms-transform: translatex(100%);
   -o-transform: translatex(100%);
   transform: translatex(100%);
 }
 .k-fx-tile.k-fx-right.k-fx-reverse.k-fx-start .k-fx-current {
   -webkit-transform: translatex(0);
-  -moz-transform: translatex(0);
   -ms-transform: translatex(0);
   -o-transform: translatex(0);
   transform: translatex(0);
 }
 .k-fx-tile.k-fx-right.k-fx-reverse.k-fx-end .k-fx-current {
   -webkit-transform: translatex(-100%);
-  -moz-transform: translatex(-100%);
   -ms-transform: translatex(-100%);
   -o-transform: translatex(-100%);
   transform: translatex(-100%);
 }
 .k-fx-tile.k-fx-right.k-fx-reverse.k-fx-start .k-fx-next {
   -webkit-transform: translatex(100%);
-  -moz-transform: translatex(100%);
   -ms-transform: translatex(100%);
   -o-transform: translatex(100%);
   transform: translatex(100%);
 }
 .k-fx-tile.k-fx-right.k-fx-reverse.k-fx-end .k-fx-next {
   -webkit-transform: translatex(0%);
-  -moz-transform: translatex(0%);
   -ms-transform: translatex(0%);
   -o-transform: translatex(0%);
   transform: translatex(0%);
@@ -2153,14 +2198,12 @@ button.km-button {
 .k-fx-tile.k-fx-start .k-fx-next {
   will-change: transform;
   -webkit-transform: translatex(100%);
-  -moz-transform: translatex(100%);
   -ms-transform: translatex(100%);
   -o-transform: translatex(100%);
   transform: translatex(100%);
 }
 .k-fx-tile.k-fx-end .k-fx-current {
   -webkit-transform: translatex(-100%);
-  -moz-transform: translatex(-100%);
   -ms-transform: translatex(-100%);
   -o-transform: translatex(-100%);
   transform: translatex(-100%);
@@ -2168,28 +2211,24 @@ button.km-button {
 .k-fx-tile.k-fx-reverse.k-fx-start .k-fx-current {
   will-change: transform;
   -webkit-transform: translatex(0);
-  -moz-transform: translatex(0);
   -ms-transform: translatex(0);
   -o-transform: translatex(0);
   transform: translatex(0);
 }
 .k-fx-tile.k-fx-reverse.k-fx-end .k-fx-current {
   -webkit-transform: translatex(100%);
-  -moz-transform: translatex(100%);
   -ms-transform: translatex(100%);
   -o-transform: translatex(100%);
   transform: translatex(100%);
 }
 .k-fx-tile.k-fx-reverse.k-fx-start .k-fx-next {
   -webkit-transform: translatex(-100%);
-  -moz-transform: translatex(-100%);
   -ms-transform: translatex(-100%);
   -o-transform: translatex(-100%);
   transform: translatex(-100%);
 }
 .k-fx-tile.k-fx-reverse.k-fx-end .k-fx-next {
   -webkit-transform: translatex(0);
-  -moz-transform: translatex(0);
   -ms-transform: translatex(0);
   -o-transform: translatex(0);
   transform: translatex(0);
@@ -2199,42 +2238,36 @@ button.km-button {
 }
 .k-fx-tile.k-fx-right.k-fx-start .k-fx-next {
   -webkit-transform: translatex(-100%);
-  -moz-transform: translatex(-100%);
   -ms-transform: translatex(-100%);
   -o-transform: translatex(-100%);
   transform: translatex(-100%);
 }
 .k-fx-tile.k-fx-right.k-fx-end .k-fx-current {
   -webkit-transform: translatex(100%);
-  -moz-transform: translatex(100%);
   -ms-transform: translatex(100%);
   -o-transform: translatex(100%);
   transform: translatex(100%);
 }
 .k-fx-tile.k-fx-right.k-fx-reverse.k-fx-start .k-fx-current {
   -webkit-transform: translatex(0);
-  -moz-transform: translatex(0);
   -ms-transform: translatex(0);
   -o-transform: translatex(0);
   transform: translatex(0);
 }
 .k-fx-tile.k-fx-right.k-fx-reverse.k-fx-end .k-fx-current {
   -webkit-transform: translatex(-100%);
-  -moz-transform: translatex(-100%);
   -ms-transform: translatex(-100%);
   -o-transform: translatex(-100%);
   transform: translatex(-100%);
 }
 .k-fx-tile.k-fx-right.k-fx-reverse.k-fx-start .k-fx-next {
   -webkit-transform: translatex(100%);
-  -moz-transform: translatex(100%);
   -ms-transform: translatex(100%);
   -o-transform: translatex(100%);
   transform: translatex(100%);
 }
 .k-fx-tile.k-fx-right.k-fx-reverse.k-fx-end .k-fx-next {
   -webkit-transform: translatex(0%);
-  -moz-transform: translatex(0%);
   -ms-transform: translatex(0%);
   -o-transform: translatex(0%);
   transform: translatex(0%);
@@ -2244,35 +2277,30 @@ button.km-button {
 .k-fx.k-fx-overlay.k-fx-left.k-fx-start .k-fx-next {
   will-change: transform;
   -webkit-transform: translatex(100%);
-  -moz-transform: translatex(100%);
   -ms-transform: translatex(100%);
   -o-transform: translatex(100%);
   transform: translatex(100%);
 }
 .k-fx.k-fx-overlay.k-fx-right.k-fx-start .k-fx-next {
   -webkit-transform: translatex(-100%);
-  -moz-transform: translatex(-100%);
   -ms-transform: translatex(-100%);
   -o-transform: translatex(-100%);
   transform: translatex(-100%);
 }
 .k-fx.k-fx-overlay.k-fx-up.k-fx-start .k-fx-next {
   -webkit-transform: translatey(100%);
-  -moz-transform: translatey(100%);
   -ms-transform: translatey(100%);
   -o-transform: translatey(100%);
   transform: translatey(100%);
 }
 .k-fx.k-fx-overlay.k-fx-down.k-fx-start .k-fx-next {
   -webkit-transform: translatey(-100%);
-  -moz-transform: translatey(-100%);
   -ms-transform: translatey(-100%);
   -o-transform: translatey(-100%);
   transform: translatey(-100%);
 }
 .k-fx.k-fx-overlay.k-fx-reverse.k-fx-start .k-fx-next {
   -webkit-transform: none;
-  -moz-transform: none;
   -ms-transform: none;
   -o-transform: none;
   transform: none;
@@ -2280,7 +2308,6 @@ button.km-button {
 .k-fx.k-fx-overlay.k-fx-reverse.k-fx-start .k-fx-current {
   will-change: transform;
   -webkit-transform: none;
-  -moz-transform: none;
   -ms-transform: none;
   -o-transform: none;
   transform: none;
@@ -2288,28 +2315,24 @@ button.km-button {
 .k-fx.k-fx-overlay.k-fx-reverse.k-fx-end .k-fx-current,
 .k-fx.k-fx-overlay.k-fx-reverse.k-fx-left.k-fx-end .k-fx-current {
   -webkit-transform: translatex(100%);
-  -moz-transform: translatex(100%);
   -ms-transform: translatex(100%);
   -o-transform: translatex(100%);
   transform: translatex(100%);
 }
 .k-fx.k-fx-overlay.k-fx-reverse.k-fx-right.k-fx-end .k-fx-current {
   -webkit-transform: translatex(-100%);
-  -moz-transform: translatex(-100%);
   -ms-transform: translatex(-100%);
   -o-transform: translatex(-100%);
   transform: translatex(-100%);
 }
 .k-fx.k-fx-overlay.k-fx-reverse.k-fx-up.k-fx-end .k-fx-current {
   -webkit-transform: translatey(100%);
-  -moz-transform: translatey(100%);
   -ms-transform: translatey(100%);
   -o-transform: translatey(100%);
   transform: translatey(100%);
 }
 .k-fx.k-fx-overlay.k-fx-reverse.k-fx-down.k-fx-end .k-fx-current {
   -webkit-transform: translatey(-100%);
-  -moz-transform: translatey(-100%);
   -ms-transform: translatey(-100%);
   -o-transform: translatey(-100%);
   transform: translatey(-100%);
@@ -2540,6 +2563,14 @@ body:before {
 .km-add:before {
   content: "\e0cb";
 }
+.km-arrow-n:after,
+.km-arrow-n:before {
+  content: "\e001";
+}
+.km-arrow-s:after,
+.km-arrow-s:before {
+  content: "\e002";
+}
 .km-battery:after,
 .km-battery:before {
   content: "\e0ce";
@@ -2614,6 +2645,10 @@ body:before {
 .km-about:before {
   content: "\e0de";
 }
+.km-minus:after,
+.km-minus:before {
+  content: "\e033";
+}
 .km-more:after,
 .km-more:before {
   content: "\e0e0";
@@ -2637,6 +2672,10 @@ body:before {
 .km-play:after,
 .km-play:before {
   content: "\e0e5";
+}
+.km-plus:after,
+.km-plus:before {
+  content: "\e032";
 }
 .km-recents:after,
 .km-recents:before {
@@ -3221,7 +3260,6 @@ body:before {
   border: 0 solid #fff;
   border-width: .24em 0 0 .24em;
   -webkit-transform: rotate(-45deg);
-  -moz-transform: rotate(-45deg);
   -ms-transform: rotate(-45deg);
   -o-transform: rotate(-45deg);
   transform: rotate(-45deg);

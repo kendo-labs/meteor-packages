@@ -1,5 +1,5 @@
 /**
- * Copyright 2014 Telerik AD
+ * Copyright 2015 Telerik AD
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1383,6 +1383,25 @@ html body .k-button-bare.k-upload-button:hover {
 .k-breadcrumbs:hover .k-i-arrow-e {
   background-position: 0 -16px;
 }
+/* Dropdown icon in k-scheduler-views */
+.k-pager-numbers .k-current-page .k-link:after,
+.k-scheduler-toolbar > ul.k-scheduler-views > li.k-current-view .k-link:after {
+  background-position: 0px -32px;
+}
+.k-link:not(.k-state-disabled):hover > .k-pager-numbers .k-current-page .k-link:after,
+.k-link:not(.k-state-disabled):hover > .k-scheduler-toolbar > ul.k-scheduler-views > li.k-current-view .k-link:after,
+.k-state-hover > .k-pager-numbers .k-current-page .k-link:after,
+.k-state-hover > .k-scheduler-toolbar > ul.k-scheduler-views > li.k-current-view .k-link:after,
+.k-state-hover > * > .k-pager-numbers .k-current-page .k-link:after,
+.k-state-hover > * > .k-scheduler-toolbar > ul.k-scheduler-views > li.k-current-view .k-link:after,
+.k-button:not(.k-state-disabled):hover .k-pager-numbers .k-current-page .k-link:after,
+.k-button:not(.k-state-disabled):hover .k-scheduler-toolbar > ul.k-scheduler-views > li.k-current-view .k-link:after,
+.k-textbox:hover .k-pager-numbers .k-current-page .k-link:after,
+.k-textbox:hover .k-scheduler-toolbar > ul.k-scheduler-views > li.k-current-view .k-link:after,
+.k-button:active .k-pager-numbers .k-current-page .k-link:after,
+.k-button:active .k-scheduler-toolbar > ul.k-scheduler-views > li.k-current-view .k-link:after {
+  background-position: -16px -32px;
+}
 /* Colors */
 html .k-success-colored {
   color: #507f50;
@@ -1511,6 +1530,11 @@ html .k-error-colored {
   overflow-x: auto;
   /*needed by IE8*/
 }
+/* current time indicator */
+.k-current-time {
+  background: #f00;
+  position: absolute;
+}
 /* override box sizing for grid layout framework integration (Bootstrap 3, Foundation 4) */
 .k-animation-container,
 .k-widget,
@@ -1558,9 +1582,13 @@ a.k-button:hover {
   -webkit-background-clip: border-box;
   background-clip: border-box;
 }
-.k-checkbox,
+input.k-checkbox,
 .k-radio {
-  display: none;
+  display: inline;
+  opacity: 0;
+  width: 0;
+  margin: 0;
+  position: absolute;
 }
 .k-checkbox-label {
   position: relative;
@@ -1630,9 +1658,83 @@ a.k-button:hover {
 .k-radio:disabled + .k-radio-label {
   cursor: auto;
 }
+.k-ie8 input.k-checkbox,
+.k-ie8 .k-radio {
+  display: inline-block;
+  width: auto;
+}
+.k-ie8 .k-checkbox-label,
+.k-ie8 .k-radio-label {
+  padding-left: 0;
+}
+.k-ie8 .k-checkbox-label:before,
+.k-ie8 .k-checkbox-label:after,
+.k-ie8 .k-radio-label:before,
+.k-ie8 .k-radio-label:after {
+  display: none;
+}
+/* RTL for checkboxes and radio buttons */
+.k-rtl .k-checkbox-label,
+.k-rtl .k-radio-label {
+  padding-right: 1.5em;
+}
+.k-rtl .k-checkbox-label:before,
+.k-rtl .k-checkbox-label:after,
+.k-rtl .k-radio-label:before {
+  right: 0;
+}
+.k-rtl .k-radio:checked + .k-radio-label:after {
+  right: 3px;
+}
 input.k-checkbox + label {
   -webkit-user-select: none;
   user-select: none;
+}
+/* Off-screen container used during export */
+.k-pdf-export-shadow {
+  position: absolute;
+  overflow: visible;
+  left: -10000px;
+}
+/* responsive panel */
+.k-rpanel-left {
+  -webkit-transform: translateX(-100%) translateZ(0);
+  -ms-transform: translateX(-100%) translateZ(0);
+  transform: translateX(-100%) translateZ(0);
+  left: 0;
+}
+.k-rpanel-right {
+  -webkit-transform: translateX(100%) translateZ(0);
+  -ms-transform: translateX(100%) translateZ(0);
+  transform: translateX(100%) translateZ(0);
+  right: 0;
+}
+.k-rpanel-left,
+.k-rpanel-right {
+  position: fixed;
+  display: block;
+  overflow: auto;
+  min-width: 320px;
+  height: 100%;
+  top: 0;
+}
+.k-rpanel-left.k-rpanel-expanded,
+.k-rpanel-right.k-rpanel-expanded {
+  -webkit-transform: translateX(0) translateZ(0);
+  -ms-transform: translateX(0) translateZ(0);
+  transform: translateX(0) translateZ(0);
+}
+.k-rpanel-left + *,
+.k-rpanel-right + * {
+  overflow: auto;
+}
+.k-rpanel-top {
+  position: static;
+  overflow: hidden;
+  max-height: 0;
+}
+.k-rpanel-top.k-rpanel-expanded {
+  max-height: 568px;
 }
 .k-edit-form {
   margin: 0;
@@ -1953,7 +2055,7 @@ div.k-window-iframecontent {
   position: static;
   border-style: solid;
   border-width: 1px;
-  margin: 0 .29em .3em;
+  margin: 0 .286em .3em;
   padding: .3em .92em;
   zoom: 1;
 }
@@ -1998,6 +2100,91 @@ div.k-window-iframecontent {
   100% {
     left: 0;
   }
+}
+/* left and right tabs */
+.k-tabstrip-left > div.k-content,
+.k-tabstrip-right > div.k-content {
+  margin: .286em .3em;
+}
+.k-tabstrip-left .k-tabstrip-items .k-item,
+.k-tabstrip-right .k-tabstrip-items .k-item {
+  display: block;
+  margin-bottom: -1px;
+}
+.k-tabstrip-left .k-tabstrip-items .k-link,
+.k-tabstrip-right .k-tabstrip-items .k-link {
+  display: block;
+}
+.k-tabstrip-left .k-tabstrip-items .k-tab-on-top,
+.k-tabstrip-right .k-tabstrip-items .k-tab-on-top,
+.k-tabstrip-left .k-tabstrip-items .k-state-active,
+.k-tabstrip-right .k-tabstrip-items .k-state-active,
+.k-tabstrip-left .k-panelbar .k-tabstrip-items .k-state-active,
+.k-tabstrip-right .k-panelbar .k-tabstrip-items .k-state-active {
+  margin-bottom: -1px;
+  padding-bottom: 0;
+}
+/* left tabs */
+.k-tabstrip-left .k-tabstrip-items {
+  float: left;
+  padding: .25em 0 .3em .3em;
+}
+.k-tabstrip-left .k-tabstrip-items .k-item {
+  border-width: 1px 0 1px 1px;
+  border-radius: 3px 0 0 3px;
+}
+.k-tabstrip-left .k-tabstrip-items .k-state-active {
+  border-width: 1px 0 1px 1px;
+}
+.k-tabstrip-left .k-tabstrip-items .k-tab-on-top,
+.k-tabstrip-left .k-tabstrip-items .k-state-active,
+.k-tabstrip-left .k-panelbar .k-tabstrip-items .k-state-active {
+  margin-right: -2px;
+  padding-right: 1px;
+}
+/* right tabs */
+.k-tabstrip-right .k-tabstrip-items {
+  float: right;
+  padding: .25em .3em .3em 0;
+}
+.k-tabstrip-right .k-tabstrip-items .k-item {
+  border-width: 1px 1px 1px 0;
+  border-radius: 0 3px 3px 0;
+}
+.k-tabstrip-right .k-tabstrip-items .k-state-active {
+  border-width: 1px 1px 1px 0;
+}
+.k-tabstrip-right .k-tabstrip-items .k-tab-on-top,
+.k-tabstrip-right .k-tabstrip-items .k-state-active,
+.k-tabstrip-right .k-panelbar .k-tabstrip-items .k-state-active {
+  margin-left: -1px;
+  padding-left: 1px;
+}
+/* bottom tabs */
+.k-tabstrip-bottom > .k-tabstrip-items {
+  margin-top: -1px;
+  padding: 0 .3em .3em;
+}
+.k-tabstrip-bottom > .k-content,
+.k-panelbar .k-tabstrip-bottom > .k-content {
+  margin: .3em .286em 0;
+  z-index: 1;
+  position: relative;
+}
+.k-tabstrip-bottom > .k-tabstrip-items .k-item {
+  border-width: 0 1px 1px;
+  border-radius: 0 0 4px 4px;
+}
+.k-tabstrip-bottom > .k-tabstrip-items .k-state-active {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+.k-tabstrip-bottom > .k-content {
+  min-height: 100px;
+}
+.k-tabstrip-bottom .k-tabstrip-items .k-loading {
+  top: auto;
+  bottom: 0;
 }
 /* PanelBar */
 .k-panelbar {
@@ -2077,7 +2264,7 @@ div.k-window-iframecontent {
   width: 99%;
   height: 0;
   float: inherit;
-  overflow: hidden;
+  clear: both;
 }
 .k-menu .k-item {
   -webkit-user-select: none;
@@ -2268,8 +2455,11 @@ ul.k-menu-vertical .k-separator,
   border-width: 0;
   margin: 0;
   table-layout: fixed;
-  text-align: right;
   outline: 0;
+}
+.k-calendar .k-content,
+.k-calendar .k-content th {
+  text-align: right;
 }
 .k-calendar .k-animation-container .k-content {
   height: 100%;
@@ -2633,7 +2823,8 @@ body .k-datetimepicker .k-select {
   border-style: solid;
   border-width: 1px;
 }
-.k-popup .k-item {
+.k-popup .k-item,
+.k-list-optionlabel {
   cursor: default;
 }
 .k-popup .k-calendar {
@@ -2643,14 +2834,20 @@ body .k-datetimepicker .k-select {
   height: 100%;
 }
 .k-popup .k-list .k-item,
-.k-fieldselector .k-list .k-item {
+.k-fieldselector .k-list .k-item,
+.k-list-optionlabel,
+.k-popup > .k-static-header {
   padding: 1px 5px 1px 5px;
   line-height: 1.8em;
   min-height: 1.8em;
 }
+.k-popup > .k-static-header {
+  padding-right: 22px;
+}
 .k-overflow-container .k-item {
   padding: 1px;
 }
+.k-overflow-container > .k-state-disabled .k-button,
 .k-overflow-container .k-button.k-state-disabled,
 .k-overflow-container .k-button.k-state-disabled:hover {
   border: 0 ;
@@ -2662,7 +2859,9 @@ body .k-datetimepicker .k-select {
 .k-overflow-container .k-state-hover,
 .k-overflow-container .k-state-focused,
 .k-overflow-container .k-state-selected,
-.k-fieldselector .k-list .k-item {
+.k-fieldselector .k-list .k-item,
+.k-list-optionlabel.k-state-focused,
+.k-list-optionlabel.k-state-selected {
   padding: 0 4px;
   border-width: 1px;
   border-style: solid;
@@ -2753,11 +2952,11 @@ body .k-datetimepicker .k-select {
 .k-textbox {
   outline: 0;
   padding: 2px .3em;
-  line-height: 1.6em;
 }
 input.k-textbox {
   height: 2.13em;
   text-indent: 0.33em;
+  line-height: 1.6em;
 }
 .k-ie input.k-textbox {
   text-indent: 0.165em;
@@ -3926,6 +4125,9 @@ span.k-tooltip {
 .k-splitbar-vertical-hover > .k-expand-prev {
   background-position: -14px -165px;
 }
+.k-splitter-resizing {
+  overflow: hidden;
+}
 /* IE7 inline-block behavior */
 .k-ie7 .k-button,
 .k-ie7 .k-grid-filter,
@@ -4005,6 +4207,62 @@ span.k-tooltip {
 .k-ie7 .k-edit-field > .k-textbox {
   text-indent: 0;
 }
+/* Virtual List */
+.k-virtual-wrap {
+  position: relative;
+}
+.k-virtual-wrap > .k-list {
+  margin: 0;
+  padding: 0;
+}
+.k-virtual-list {
+  overflow-y: scroll;
+  /* has to be scroll, not auto */
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+}
+.k-virtual-list > .k-virtual-content {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+.k-virtual-option-label {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+.k-virtual-wrap > .k-virtual-header {
+  text-align: right;
+}
+.k-popup .k-list .k-item.k-virtual-item {
+  /*padding: 1px 0;*/
+}
+.k-virtual-list .k-virtual-item {
+  position: absolute;
+  width: 100%;
+  box-sizing: border-box;
+}
+.k-popup .k-item.k-first {
+  position: relative;
+}
+.k-popup .k-item > .k-group {
+  background: none;
+  position: absolute;
+  top: 0;
+  right: .3em;
+}
+.k-popup .k-item.k-first,
+.k-virtual-item.k-first {
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+}
+.k-popup > .k-static-header {
+  text-align: right;
+}
 /* animation classes */
 .k-fx-end .k-fx-next,
 .k-fx-end .k-fx-current {
@@ -4026,10 +4284,6 @@ span.k-tooltip {
 .k-fx-hidden,
 .k-fx-hidden * {
   visibility: hidden !important;
-}
-.k-fx-hidden .km-view-title {
-  visibility: visible !important;
-  opacity: 0;
 }
 .k-fx-reverse .k-fx-current {
   z-index: 1;

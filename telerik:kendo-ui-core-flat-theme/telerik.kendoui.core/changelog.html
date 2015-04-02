@@ -4,7 +4,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Changelog for Kendo UI v2014.3.1119</title>
+    <title>Changelog for Kendo UI v2015.1.318</title>
     <style>
         html, body {
             margin: 0;
@@ -52,216 +52,131 @@
 </head>
 <body>
     <div id="page">
-        <h1 class="title">Release notes for Kendo UI v2014.3.1119</h1>
+        <h1 class="title">Release notes for Kendo UI v2015.1.318</h1>
 
         <h1>Components</h1>
         <div class="tClear poTopLine">
             <div class="poBoxIconText">
-                <p><strong>What's new</strong></p><ul><li>Add kendo.saveAs method for saving files in the browser</li><li>Enable animations in Canvas rendering</li></ul>
                 
+                <p><strong>What's fixed</strong></p><ul><li>view with eval template messes up the content</li></ul>
             </div>
         </div>
 
 
         <div class="tClear poTopLine">
-            <h2>ActionSheet</h2>
-            <p><strong>What's new</strong></p><ul><li>improve AutoComplete k-ng-model behavior</li></ul>
-            
-        </div>
-        <div class="tClear poTopLine">
             <h2>AngularJS</h2>
-            <p><strong>What's new</strong></p><ul><li>improve k-ng-delay to start right away if value is set</li><li>Support primitive value in dropdownlist (AngularJS)</li><li>Improve MultiSelect AngularJS behavior</li><li>Support nested template directives for databound widgets</li><li>mobile pane AngularJS directive</li><li>mobile popover AngularJS directive</li><li>mobile splitview AngularJS directive</li><li>mobile view AngularJS directive</li><li>mobile application AngularJS directive</li></ul>
-            <p><strong>What's fixed</strong></p><ul><li>Detail template container is not removed when k-detail-template is used with AngularJS</li><li>Using JSON.stringify() on Grid options throws an error</li><li>listview does not compile changes to a single item</li><li>k-rebind and k-ng-delay cannot be combined for the same widget</li><li>DropDownList does not select correct item when bound with ng-model/k-ng-model</li></ul>
-        </div>
-        <div class="tClear poTopLine">
-            <h2>Application</h2>
-            <p><strong>What's new</strong></p><ul><li>Mobile Application support for browser history detached mode</li><li>mobile application AngularJS directive</li></ul>
-            <p><strong>What's fixed</strong></p><ul><li>Preventing the initial view navigation does not update location.href correctly</li><li>iOS 8 home screen app from landscape to portrait does not resize properly</li><li>Transitions cause full view flicker in iOS / Cordova</li><li>Flat loading animation does not resize correctly in Android 4.4</li><li>native scrolling mode + android theme pads the header/footer incorrectly</li></ul>
+            <p><strong>What's new</strong></p><ul><li>Support for scope member export with element directives</li></ul>
+            <p><strong>What's fixed</strong></p><ul><li>Angular templates are not persisted after rebind</li></ul>
         </div>
         <div class="tClear poTopLine">
             <h2>AutoComplete</h2>
-            <p><strong>What's new</strong></p><ul><li>improve AutoComplete k-ng-model behavior</li><li>Trigger filter event before data source filtering</li></ul>
-            <p><strong>What's fixed</strong></p><ul><li>Widget doesn't trigger filtering when the last character is deleted</li></ul>
-        </div>
-        <div class="tClear poTopLine">
-            <h2>Button</h2>
+            <p><strong>What's new</strong></p><ul><li>Implement k-ng-disabled/k-ng-readonly to support disabled/readonly in older browsers</li></ul>
             
-            <p><strong>What's fixed</strong></p><ul><li>Disabled icons in metro theme change color on hover</li></ul>
         </div>
         <div class="tClear poTopLine">
             <h2>ComboBox</h2>
-            <p><strong>What's new</strong></p><ul><li>Trigger filter event before data source filtering</li></ul>
+            <p><strong>What's new</strong></p><ul><li>Implement k-ng-disabled/k-ng-readonly to support disabled/readonly in older browsers</li></ul>
             
-        </div>
-        <div class="tClear poTopLine">
-            <h2>ContextMenu</h2>
-            
-            <p><strong>What's fixed</strong></p><ul><li>ContextMenu does not show up on every consequent contextmenu event</li><li>Context Menu does not work with SVG</li></ul>
         </div>
         <div class="tClear poTopLine">
             <h2>DataSource</h2>
-            <p><strong>What's new</strong></p><ul><li>Create observable objects only for the items from the current page.</li><li>Implement Promise API for sync/query/read</li></ul>
-            <p><strong>What's fixed</strong></p><ul><li>Removing root item from observable array throws JS error</li><li>Offline storage doesn't support parsing dates</li></ul>
+            <p><strong>What's new</strong></p><ul><li>RequestEnd event does not have its type set when triggered from query method</li></ul>
+            <p><strong>What's fixed</strong></p><ul><li>Groups are not correctly merged when fetching range for the second page with multiple levels of grouping and server operations</li><li>Custom datasource filter operators don't support string and date values</li></ul>
         </div>
         <div class="tClear poTopLine">
             <h2>DatePicker</h2>
+            <p><strong>What's new</strong></p><ul><li>Implement k-ng-disabled/k-ng-readonly to support disabled/readonly in older browsers</li></ul>
             
-            <p><strong>What's fixed</strong></p><ul><li>Wrapper sets incorrectly a format with a string format placeholder</li></ul>
         </div>
         <div class="tClear poTopLine">
             <h2>DateTimePicker</h2>
-            
-            <p><strong>What's fixed</strong></p><ul><li>Wrapper sets incorrectly a format with a string format placeholder</li></ul>
-        </div>
-        <div class="tClear poTopLine">
-            <h2>Drawing</h2>
-            <p><strong>What's new</strong></p><ul><li>Add drawing.exportPDF/SVG/Image methods</li><li>Rename Drawing API namespaces to kendo.drawing and kendo.geometry (non-breaking)</li><li>Group and element opacity</li><li>Improve speed and reduce memory usage for VML rendering</li></ul>
+            <p><strong>What's new</strong></p><ul><li>Implement k-ng-disabled/k-ng-readonly to support disabled/readonly in older browsers</li></ul>
             
         </div>
         <div class="tClear poTopLine">
             <h2>DropDownList</h2>
-            <p><strong>What's new</strong></p><ul><li>Support primitive value in dropdownlist (AngularJS)</li><li>Trigger filter event before data source filtering</li></ul>
-            <p><strong>What's fixed</strong></p><ul><li>DropDownList does not select correct item when bound with ng-model/k-ng-model</li><li>Widget binds to an object when DropDown initialized from HTML</li></ul>
-        </div>
-        <div class="tClear poTopLine">
-            <h2>Gantt</h2>
-            <p><strong>What's new</strong></p><ul><li>Add Year View</li></ul>
-            
+            <p><strong>What's new</strong></p><ul><li>Implement k-ng-disabled/k-ng-readonly to support disabled/readonly in older browsers</li></ul>
+            <p><strong>What's fixed</strong></p><ul><li>DropDownList keyboard navigation does not work in IE</li></ul>
         </div>
         <div class="tClear poTopLine">
             <h2>Globalization</h2>
-            <p><strong>What's new</strong></p><ul><li>Update Time zones definitions to honor changes in Russian time zones</li></ul>
-            
-        </div>
-        <div class="tClear poTopLine">
-            <h2>HierarchicalDataSource</h2>
-            
-            <p><strong>What's fixed</strong></p><ul><li>toJSON does not serialize id field, if not defined in model</li></ul>
-        </div>
-        <div class="tClear poTopLine">
-            <h2>Linear Gauge</h2>
-            <p><strong>What's new</strong></p><ul><li>Add support for multiple pointers</li><li>Breaking change: Pointer option accepts a collection of pointers. Use the child pointer item tags.</li><li>Add exportToPDF, exportToImage and exportToSVG methods</li></ul>
+            <p><strong>What's new</strong></p><ul><li>Update Kendo UI culture script files using Windows 8 globalization information</li><li>Scheduler widget translations</li><li>German translation for NumericTextBox</li></ul>
             
         </div>
         <div class="tClear poTopLine">
             <h2>ListView</h2>
-            <p><strong>What's new</strong></p><ul><li>Support nested template directives for databound widgets</li></ul>
-            <p><strong>What's fixed</strong></p><ul><li>listview does not compile changes to a single item</li><li>ListView angular template does not work when edit -&gt; cancel is performed</li><li>ListView initialized through MVVM does not bind the item after user closes the editing mode</li></ul>
+            
+            <p><strong>What's fixed</strong></p><ul><li>ListView doesn't re-compile angular templates on destroying the editor</li><li>Removing item from the ListView doesn't revert edited item </li></ul>
         </div>
         <div class="tClear poTopLine">
             <h2>MVVM</h2>
             
-            <p><strong>What's fixed</strong></p><ul><li>data value primitive and datasource binding do not work with selects</li></ul>
+            <p><strong>What's fixed</strong></p><ul><li>checkbox checked binding does not work with the value binding</li><li>MVVM binding in template lost on node collapse</li></ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>MaskedTextBox</h2>
+            <p><strong>What's new</strong></p><ul><li>Optional way to post widget's raw value</li><li>Unmask method</li></ul>
+            
+        </div>
+        <div class="tClear poTopLine">
+            <h2>MobileButton</h2>
+            <p><strong>What's new</strong></p><ul><li>Allow mobile buttons to trigger on press </li></ul>
+            
         </div>
         <div class="tClear poTopLine">
             <h2>MobileListView</h2>
-            <p><strong>What's new</strong></p><ul><li>Support nested template directives for databound widgets</li></ul>
-            
-        </div>
-        <div class="tClear poTopLine">
-            <h2>MobileTabStrip</h2>
-            
-            <p><strong>What's fixed</strong></p><ul><li>Mobile TabStrip look and feel does not match iOS 7/8 native one</li></ul>
+            <p><strong>What's new</strong></p><ul><li>The listview should not redraw its item if MVVM bound</li></ul>
+            <p><strong>What's fixed</strong></p><ul><li>ListView filtering does not clear filter box when datasource filters are cleared</li><li>Popover within a ModalView shows under the ModalView</li><li>Changed Kendo.mobile.ui.ListView.filterable.operator default from 'start...</li></ul>
         </div>
         <div class="tClear poTopLine">
             <h2>MobileView</h2>
-            <p><strong>What's new</strong></p><ul><li>mobile view AngularJS directive</li></ul>
+            <p><strong>What's new</strong></p><ul><li>calling preventDefault() in beforeHide event handler should cancel navigation</li></ul>
             
         </div>
         <div class="tClear poTopLine">
             <h2>MultiSelect</h2>
-            <p><strong>What's new</strong></p><ul><li>Improve MultiSelect AngularJS behavior</li><li>Trigger filter event before data source filtering</li></ul>
-            <p><strong>What's fixed</strong></p><ul><li>Widget doesn't trigger filtering when the last character is deleted</li><li>Popup closes in IE10</li></ul>
-        </div>
-        <div class="tClear poTopLine">
-            <h2>Notification</h2>
+            <p><strong>What's new</strong></p><ul><li>Implement k-ng-disabled/k-ng-readonly to support disabled/readonly in older browsers</li></ul>
             
-            <p><strong>What's fixed</strong></p><ul><li>Static notifications throw a JS error when animations are disabled</li></ul>
         </div>
         <div class="tClear poTopLine">
             <h2>NumericTextBox</h2>
-            
-            <p><strong>What's fixed</strong></p><ul><li>Wrapper sets incorrectly a format with a string format placeholder</li></ul>
-        </div>
-        <div class="tClear poTopLine">
-            <h2>Pager</h2>
-            <p><strong>What's new</strong></p><ul><li>Support nested template directives for databound widgets</li></ul>
-            
-        </div>
-        <div class="tClear poTopLine">
-            <h2>Pane</h2>
-            <p><strong>What's new</strong></p><ul><li>mobile pane AngularJS directive</li></ul>
+            <p><strong>What's new</strong></p><ul><li>Implement k-ng-disabled/k-ng-readonly to support disabled/readonly in older browsers</li></ul>
             
         </div>
         <div class="tClear poTopLine">
             <h2>PanelBar</h2>
             
-            <p><strong>What's fixed</strong></p><ul><li>Not able to focus widget with keyboard navigation in Chrome</li></ul>
-        </div>
-        <div class="tClear poTopLine">
-            <h2>PivotGrid</h2>
-            <p><strong>What's new</strong></p><ul><li>Add support for average measure calculation when a flat data is used</li><li>Implement height option of the PivotConfigurator</li><li>Add icons to the PivotConfigurator treeview</li></ul>
-            <p><strong>What's fixed</strong></p><ul><li>Firefox: Column headers are not sized correctly after expand/collapse</li><li>PivotGrid does not expand a dimension when used measure has no value</li><li>PivotDataSource does not honor custom schema.axes configuration</li><li>Filter menu does not prevent anchor default behavior resulting in incorrect URL navigation</li><li>PivotGrid with local data doesn't expand/collapse in IE and Firefox</li><li>PivotGrid does not accept a string value for the height option</li><li>Missing Values in Cells</li></ul>
+            <p><strong>What's fixed</strong></p><ul><li>JavaScript error when all panels of a PanelBar are disabled</li></ul>
         </div>
         <div class="tClear poTopLine">
             <h2>PopOver</h2>
-            <p><strong>What's new</strong></p><ul><li>mobile popover AngularJS directive</li></ul>
             
-        </div>
-        <div class="tClear poTopLine">
-            <h2>Radial Gauge</h2>
-            <p><strong>What's new</strong></p><ul><li>Add support for multiple pointers</li><li>Breaking change: Pointer option accepts a collection of pointers. Use the child pointer item tags.</li><li>Add exportToPDF, exportToImage and exportToSVG methods</li></ul>
-            
-        </div>
-        <div class="tClear poTopLine">
-            <h2>Router</h2>
-            <p><strong>What's new</strong></p><ul><li>support for case insensitive routes</li></ul>
-            
+            <p><strong>What's fixed</strong></p><ul><li>Popover within a ModalView shows under the ModalView</li></ul>
         </div>
         <div class="tClear poTopLine">
             <h2>ScrollView</h2>
-            <p><strong>What's new</strong></p><ul><li>Support nested template directives for databound widgets</li></ul>
             
+            <p><strong>What's fixed</strong></p><ul><li>ScrollView template demo is broken</li></ul>
         </div>
         <div class="tClear poTopLine">
-            <h2>Slider</h2>
+            <h2>Splitter</h2>
             
-            <p><strong>What's fixed</strong></p><ul><li>Slider doesn't work in a Mobile PopOver</li></ul>
-        </div>
-        <div class="tClear poTopLine">
-            <h2>SplitView</h2>
-            <p><strong>What's new</strong></p><ul><li>mobile splitview AngularJS directive</li></ul>
-            
-        </div>
-        <div class="tClear poTopLine">
-            <h2>TabStrip</h2>
-            
-            <p><strong>What's fixed</strong></p><ul><li>Not able to focus widget with keyboard navigation in Chrome</li><li>Tabstrip doesn't destroy Kendo UI widgets when reloading AJAX content</li></ul>
+            <p><strong>What's fixed</strong></p><ul><li>Splitter should not trigger page scrollbars during resize</li></ul>
         </div>
         <div class="tClear poTopLine">
             <h2>TimePicker</h2>
+            <p><strong>What's new</strong></p><ul><li>Implement k-ng-disabled/k-ng-readonly to support disabled/readonly in older browsers</li></ul>
             
-            <p><strong>What's fixed</strong></p><ul><li>Wrapper sets incorrectly a format with a string format placeholder</li></ul>
         </div>
         <div class="tClear poTopLine">
-            <h2>ToolBar</h2>
+            <h2>Touch</h2>
             
-            <p><strong>What's fixed</strong></p><ul><li>ButtonGroup with no buttons throws JavaScript error</li><li>Click event (button level) is fired for disabled buttons located in the overflow popup</li></ul>
+            <p><strong>What's fixed</strong></p><ul><li>Widget "visible" binding does not work with kendoTouch</li></ul>
         </div>
         <div class="tClear poTopLine">
             <h2>TreeList</h2>
             
-            <p><strong>What's fixed</strong></p><ul><li>Horizontal scroll of the content doesn't scroll the header</li></ul>
-        </div>
-        <div class="tClear poTopLine">
-            <h2>Validator</h2>
-            <p><strong>What's new</strong></p><ul><li>Support nested template directives for databound widgets</li></ul>
-            <p><strong>What's fixed</strong></p><ul><li>Validation message is duplicated when placeholder is in front of the validated element</li></ul>
-        </div>
-        <div class="tClear poTopLine">
-            <h2>Window</h2>
-            <p><strong>What's new</strong></p><ul><li>Allow setting of actions via setOptions method</li></ul>
-            <p><strong>What's fixed</strong></p><ul><li>title() method should not double encode already encoded text</li></ul>
+            <p><strong>What's fixed</strong></p><ul><li>New child items do not have proper default values</li><li>TreeList create command is not correctly executed when widget is inside table row</li><li>Cannot add child item of leaf node in TreeList with server operations</li></ul>
         </div>
     </div>
 </body>
