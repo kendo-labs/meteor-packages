@@ -17,8 +17,7 @@
     define([], f);
 })(function(){
 
-
-
+(function ($, undefined) {
 /* Filter cell operator messages */
 
 if (kendo.ui.FilterCell) {
@@ -28,8 +27,8 @@ $.extend(true, kendo.ui.FilterCell.prototype.options.operators,{
     "eq": "Egal cu",
     "gt": "După",
     "gte": "După sau egal cu",
-    "lt": "Inainte de",
-    "lte": "Inainte sau egal cu",
+    "lt": "Înainte de",
+    "lte": "Înainte sau egal cu",
     "neq": "Diferit de"
   },
   "enums": {
@@ -50,7 +49,7 @@ $.extend(true, kendo.ui.FilterCell.prototype.options.operators,{
     "endswith": "Se termină cu",
     "eq": "Egal cu",
     "neq": "Diferit de",
-    "startswith": "Incepe cu"
+    "startswith": "Începe cu"
   }
 });
 }
@@ -64,8 +63,8 @@ $.extend(true, kendo.ui.FilterMenu.prototype.options.operators,{
     "eq": "Egal cu",
     "gt": "După",
     "gte": "După sau egal cu",
-    "lt": "Inainte de",
-    "lte": "Inainte sau egal cu",
+    "lt": "Înainte de",
+    "lte": "Înainte sau egal cu",
     "neq": "Diferit de"
   },
   "enums": {
@@ -86,7 +85,7 @@ $.extend(true, kendo.ui.FilterMenu.prototype.options.operators,{
     "endswith": "Se termină cu",
     "eq": "Egal cu",
     "neq": "Diferit de",
-    "startswith": "Incepe cu"
+    "startswith": "Începe cu"
   }
 });
 }
@@ -99,10 +98,10 @@ $.extend(true, kendo.ui.ColumnMenu.prototype.options.messages,{
   "columns": "Coloane",
   "sortAscending": "Sortare ascendentă",
   "sortDescending": "Sortare descendentă",
-  "settings": "Setări coloana",
+  "settings": "Setări coloană",
   "done": "Făcut",
   "lock": "Blocare",
-  "unlock": "Descuia"
+  "unlock": "Deblocare"
 });
 }
 
@@ -112,23 +111,23 @@ if (kendo.ui.RecurrenceEditor) {
 kendo.ui.RecurrenceEditor.prototype.options.messages =
 $.extend(true, kendo.ui.RecurrenceEditor.prototype.options.messages,{
   "daily": {
-    "interval": "days(s)",
+    "interval": "zi/zile",
     "repeatEvery": "Repeat every:"
   },
   "end": {
-    "after": "After",
+    "after": "După",
     "occurrence": "occurrence(s)",
     "label": "End:",
-    "never": "Never",
+    "never": "Niciodată",
     "on": "On",
     "mobileLabel": "Ends"
   },
   "frequencies": {
-    "daily": "Daily",
-    "monthly": "Monthly",
-    "never": "Never",
-    "weekly": "Weekly",
-    "yearly": "Yearly"
+    "daily": "Zilnic",
+    "monthly": "Lunar",
+    "never": "Niciodată",
+    "weekly": "Saptamanal",
+    "yearly": "Anual"
   },
   "monthly": {
     "day": "Day",
@@ -144,14 +143,14 @@ $.extend(true, kendo.ui.RecurrenceEditor.prototype.options.messages,{
     "third": "third"
   },
   "weekly": {
-    "repeatEvery": "Repeat every:",
-    "repeatOn": "Repeat on:",
+    "repeatEvery": "Repetă în fiecare:",
+    "repeatOn": "Repetă la:",
     "interval": "week(s)"
   },
   "yearly": {
     "of": "of",
-    "repeatEvery": "Repeat every:",
-    "repeatOn": "Repeat on:",
+    "repeatEvery": "Repetă în fiecare:",
+    "repeatOn": "Repetă la:",
     "interval": "year(s)"
   },
   "weekdays": {
@@ -218,12 +217,12 @@ $.extend(true, kendo.ui.Editor.prototype.options.messages,{
   "addColumnRight": "Add column on the right",
   "addRowAbove": "Add row above",
   "addRowBelow": "Add row below",
-  "deleteColumn": "Delete column",
-  "deleteRow": "Delete row",
+  "deleteColumn": "Șterge coloană",
+  "deleteRow": "Șterge rand",
   "formatting": "Format",
   "viewHtml": "View HTML",
-  "dialogUpdate": "Update",
-  "insertFile": "Insert file"
+  "dialogUpdate": "Actualizează",
+  "insertFile": "Inserează fisier"
 });
 }
 
@@ -270,6 +269,8 @@ $.extend(true, kendo.ui.Grid.prototype.options.messages,{
     "create": "Adaugă element nou",
     "destroy": "Șterge",
     "edit": "Modifică",
+    "excel": "Export to Excel",
+    "pdf": "Export to PDF",
     "save": "Salvează modificările",
     "select": "Selectează",
     "update": "Actualizează"
@@ -315,15 +316,17 @@ $.extend(true, kendo.ui.Pager.prototype.options.messages,{
 if (kendo.ui.Scheduler) {
 kendo.ui.Scheduler.prototype.options.messages =
 $.extend(true, kendo.ui.Scheduler.prototype.options.messages,{
-  "allDay": "all day",
+  "allDay": "toată ziua",
   "cancel": "Anulează",
-  "confirmation": "Are you sure you want to delete this event?",
-  "date": "Date",
-  "destroy": "Delete",
+  "editable": {
+    "confirmation": "Are you sure you want to delete this event?"
+  },
+  "date": "Data",
+  "destroy": "Șterge",
   "editor": {
     "allDayEvent": "All day event",
     "description": "Description",
-    "editorTitle": "Event",
+    "editorTitle": "Eveniment",
     "end": "End",
     "endTimezone": "End timezone",
     "repeat": "Repeat",
@@ -347,11 +350,11 @@ $.extend(true, kendo.ui.Scheduler.prototype.options.messages,{
     "editWindowSeries": "Edit the series",
     "editWindowTitle": "Edit Recurring Item"
   },
-  "save": "Save",
+  "save": "Salvează",
   "time": "Time",
   "today": "Today",
   "views": {
-    "agenda": "Agenda",
+    "agenda": "Agendă",
     "day": "Day",
     "month": "Month",
     "week": "Week",
@@ -381,6 +384,7 @@ $.extend(true, kendo.ui.Upload.prototype.options.localization,{
   "headerStatusUploading": "Uploading..."
 });
 }
+})(window.kendo.jQuery);
 
 
 return window.kendo;

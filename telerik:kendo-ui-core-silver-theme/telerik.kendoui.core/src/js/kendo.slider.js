@@ -73,6 +73,10 @@
 
             options.tooltip.format = options.tooltip.enabled ? options.tooltip.format || "{0}" : "{0}";
 
+            if (options.smallStep <= 0) {
+                throw new Error('Kendo UI Slider smallStep must be a positive number.');
+            }
+
             that._createHtml();
             that.wrapper = that.element.closest(".k-slider");
             that._trackDiv = that.wrapper.find(TRACK_SELECTOR);
@@ -1306,6 +1310,14 @@
             firstInput.type = "text";
             secondInput.type = "text";
 
+            if (options && options.showButtons) {
+                if (window.console) {
+                    window.console.warn("showbuttons option is not supported for the range slider, ignoring");
+                }
+
+                options.showButtons = false;
+            }
+
             options = extend({}, {
                 selectionStart: parseAttr(firstInput, "value"),
                 min: parseAttr(firstInput, "min"),
@@ -1505,7 +1517,7 @@
                     }
                 }
 
-                that._setValueInRange(selectionStartValue, selectionEndValue);
+                that._setValueInRange(round(selectionStartValue), round(selectionEndValue));
 
                 dragSelectionStart = Math.max(selectionStartValue, that.options.selectionStart);
                 dragSelectionEnd = Math.min(selectionEndValue, that.options.selectionEnd);

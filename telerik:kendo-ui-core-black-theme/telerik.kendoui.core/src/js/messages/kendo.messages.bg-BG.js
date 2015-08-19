@@ -17,8 +17,8 @@
     define([], f);
 })(function(){
 
+(function ($, undefined) {
 /* Validator */
-
 if (kendo.ui.Validator) {
 kendo.ui.Validator.prototype.options.messages =
 $.extend(true, kendo.ui.Validator.prototype.options.messages,{
@@ -29,7 +29,8 @@ $.extend(true, kendo.ui.Validator.prototype.options.messages,{
   "step": "{0} не е валидно",
   "email": "{0} не е валиден email",
   "url": "{0} не е валиден URL",
-  "date": "{0} не е валидна дата"
+  "date": "{0} не е валидна дата",
+  "dateCompare": "Крайната дата трябва да бъде по-голяма от началната дата"
 });
 }
 
@@ -319,6 +320,8 @@ $.extend(true, kendo.ui.Grid.prototype.options.messages,{
     "create": "Добави",
     "destroy": "Изтриване",
     "edit": "Редактиране",
+    "excel": "Експорт към Excel",
+    "pdf": "Експорт към PDF",
     "save": "Запази промените",
     "select": "Избери",
     "update": "Запази"
@@ -327,7 +330,8 @@ $.extend(true, kendo.ui.Grid.prototype.options.messages,{
     "cancelDelete": "Откажи",
     "confirmation": "Сигурни ли сте, че искате да изтриете записа?",
     "confirmDelete": "Изтрий"
-  }
+  },
+  "noRecords": "Няма налични записи."
 });
 }
 
@@ -379,6 +383,17 @@ $.extend(true, kendo.ui.FilterCell.prototype.options.messages,{
   "isFalse": "не е вярно",
   "isTrue": "е вярно",
   "operator": "Оператор"
+});
+}
+
+/* FilterMultiCheck messages */
+
+if (kendo.ui.FilterMultiCheck) {
+kendo.ui.FilterMultiCheck.prototype.options.messages =
+$.extend(true, kendo.ui.FilterMultiCheck.prototype.options.messages,{
+  "checkAll": "Избери всички",
+  "clear": "Премахни филтър",
+  "filter": "Филтрирай"
 });
 }
 
@@ -483,9 +498,11 @@ kendo.ui.Scheduler.prototype.options.messages =
 $.extend(true, kendo.ui.Scheduler.prototype.options.messages,{
   "allDay": "цял ден",
   "cancel": "Откажи",
-  "confirmation": "Сигурен ли сте че искате да изтриете това събитие?",
   "date": "Дата",
   "destroy": "Изтрий",
+  "editable": {
+    "confirmation": "Сигурен ли сте че искате да изтриете това събитие?"
+  },
   "editor": {
     "allDayEvent": "Целодневно събитие",
     "description": "Описание",
@@ -528,6 +545,7 @@ $.extend(true, kendo.ui.Scheduler.prototype.options.messages,{
   "showWorkDay": "Покажи работни часове"
 });
 }
+})(window.kendo.jQuery);
 
 
 return window.kendo;

@@ -17,6 +17,7 @@
     define([], f);
 })(function(){
 
+(function ($, undefined) {
 /* FlatColorPicker messages */
 
 if (kendo.ui.FlatColorPicker) {
@@ -274,6 +275,8 @@ $.extend(true, kendo.ui.Grid.prototype.options.messages,{
     "create": "新增",
     "destroy": "刪除",
     "edit": "編輯",
+    "excel": "Export to Excel",
+    "pdf": "Export to PDF",
     "save": "保存",
     "select": "選擇",
     "update": "更新"
@@ -500,6 +503,7 @@ $.extend(true, kendo.ui.Validator.prototype.options.messages,{
   "date": "{0} 不是合法的日期"
 });
 }
+})(window.kendo.jQuery);
 
 
 return window.kendo;

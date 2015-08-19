@@ -17,8 +17,7 @@
     define([], f);
 })(function(){
 
-
-
+(function ($, undefined) {
 /* Filter menu operator messages */
 
 if (kendo.ui.FilterCell) {
@@ -174,6 +173,8 @@ $.extend(true, kendo.ui.Grid.prototype.options.messages,{
     "canceledit": "Отмена",
     "update": "Обновить",
     "edit": "Изменить",
+    "excel": "Export to Excel",
+    "pdf": "Export to PDF",
     "select": "Выбрать",
     "cancel": "Отменить изменения",
     "save": "Сохранить изменения"
@@ -182,7 +183,8 @@ $.extend(true, kendo.ui.Grid.prototype.options.messages,{
     "confirmation": "Вы уверены, что хотите удалить эту запись?",
     "cancelDelete": "Отмена",
     "confirmDelete": "Удалить"
-  }
+  },
+  "noRecords": "Нет записей доступны."
 });
 }
 
@@ -211,7 +213,7 @@ if (kendo.ui.FilterCell) {
 kendo.ui.FilterCell.prototype.options.messages =
 $.extend(true, kendo.ui.FilterCell.prototype.options.messages,{
   "filter": "фильтровать",
-  "clear": "очистить фильтр",
+  "clear": "очистить",
   "isFalse": "ложь",
   "isTrue": "истина",
   "operator": "Оператор"
@@ -225,7 +227,7 @@ kendo.ui.FilterMenu.prototype.options.messages =
 $.extend(true, kendo.ui.FilterMenu.prototype.options.messages,{
   "filter": "фильтровать",
   "and": "И",
-  "clear": "очистить фильтр",
+  "clear": "очистить",
   "info": "Строки со значениями",
   "selectValue": "-выберите-",
   "isFalse": "ложь",
@@ -337,7 +339,9 @@ kendo.ui.Scheduler.prototype.options.messages =
 $.extend(true, kendo.ui.Scheduler.prototype.options.messages,{
   "allDay": "all day",
   "cancel": "Отмена",
-  "confirmation": "Are you sure you want to delete this event?",
+  "editable": {
+    "confirmation": "Are you sure you want to delete this event?"
+  },
   "date": "Date",
   "destroy": "Delete",
   "editor": {
@@ -398,6 +402,7 @@ $.extend(true, kendo.ui.Validator.prototype.options.messages,{
   "date": "{0} не корректная дата"
 });
 }
+})(window.kendo.jQuery);
 
 
 return window.kendo;

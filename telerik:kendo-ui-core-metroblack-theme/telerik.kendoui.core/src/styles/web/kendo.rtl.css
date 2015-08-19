@@ -94,6 +94,22 @@
     padding-left: 22px;
 }
 
+.k-rtl.k-popup .k-item > .k-group {
+    right: auto;
+    left: 0;
+}
+
+.k-rtl.k-popup .k-state-hover > .k-group {
+    right: auto;
+    left: -1px;
+}
+
+.k-rtl.k-popup > .k-group-header,
+.k-rtl.k-popup > .k-virtual-wrap > .k-group-header
+{
+    text-align: left;
+}
+
 /* Calendar */
 
 .k-rtl .k-widget.k-calendar .k-nav-prev { left: auto; right: 1%; }
@@ -318,14 +334,16 @@
 
 /* Pager */
 
-.k-rtl .k-pager-info
+.k-rtl .k-pager-info,
+.k-rtl .k-pager-wrap .k-pager-refresh
 {
     float: left;
 }
 
 .k-rtl .k-pager-wrap > .k-link,
 .k-rtl .k-pager-wrap .k-pager-numbers,
-.k-rtl .k-pager-numbers li
+.k-rtl .k-pager-numbers li,
+.k-rtl .k-pager-input
 {
     float: right;
 }
@@ -446,7 +464,8 @@
 {
     margin-left: 0;
     margin-right: 20px;
-}
+}
+
 /* Menu */
 
 .k-rtl .k-menu .k-item,
@@ -497,9 +516,15 @@
 
 .k-rtl .k-multiselect-wrap li
 {
-    padding-left:.15em;
-    padding-right: .4em;
     float: right;
+    padding: .1em .4em .1em 1.6em;
+    margin: 2px 2px 2px 0;
+}
+
+.k-rtl .k-multiselect-wrap .k-select {
+    right: auto;
+    left: 0;
+    padding: .1em .2em;
 }
 
 /* Notification */
@@ -864,6 +889,38 @@
     margin: -3px -6px 0 3px;
 }
 
+.k-rtl .k-tabstrip-prev
+{
+    left: auto;
+    right: .4em;
+}
+
+.k-rtl .k-tabstrip-next
+{
+    right: auto;
+    left: .4em;
+}
+
+/* ToolBar */
+
+.k-rtl .k-overflow-anchor
+{
+    float: left;
+    border-width: 0 1px 0 0;
+}
+
+.k-rtl .k-toolbar .k-button-group .k-button,
+.k-rtl .k-toolbar .k-split-button .k-split-button-arrow
+{
+    margin: 0 -1px 0 0;
+}
+
+.k-rtl.k-overflow-container .k-overflow-button,
+.k-rtl.k-split-container .k-button
+{
+    text-align: right;
+}
+
 /* ToolTip */
 
 .k-rtl .k-tooltip-button
@@ -889,7 +946,6 @@
 .k-rtl .k-treeview .k-plus-disabled,
 .k-rtl .k-treeview .k-minus-disabled
 {
-    float: right;
     margin-left: 0;
     margin-right: -16px;
 }

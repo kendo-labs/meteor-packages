@@ -45,7 +45,7 @@
         slice = [].slice,
         globalize = window.Globalize;
 
-    kendo.version = "2015.1.318";
+    kendo.version = "2015.2.805";
 
     function Class() {}
 
@@ -1193,6 +1193,8 @@ function pad(number, digits, end) {
                 var i = 0,
                     length = names.length,
                     name, nameLength,
+                    matchLength = 0,
+                    matchIdx = 0,
                     subValue;
 
                 for (; i < length; i++) {
@@ -1204,11 +1206,17 @@ function pad(number, digits, end) {
                         subValue = subValue.toLowerCase();
                     }
 
-                    if (subValue == name) {
-                        valueIdx += nameLength;
-                        return i + 1;
+                    if (subValue == name && nameLength > matchLength) {
+                        matchLength = nameLength;
+                        matchIdx = i;
                     }
                 }
+
+                if (matchLength) {
+                    valueIdx += matchLength;
+                    return matchIdx + 1;
+                }
+
                 return null;
             },
             checkLiteral = function() {
@@ -1266,6 +1274,10 @@ function pad(number, digits, end) {
                     count = lookAhead("d");
                     if (!calendar._lowerDays) {
                         calendar._lowerDays = lowerLocalInfo(calendar.days);
+                    }
+
+                    if (day !== null && count > 2) {
+                        continue;
                     }
 
                     day = count < 3 ? getNumber(2) : getIndexByName(calendar._lowerDays[count == 3 ? "namesAbbr" : "names"], true);
@@ -1840,6 +1852,11 @@ function pad(number, digits, end) {
         return styles;
     }
 
+    function isScrollable(element) {
+        var overflow = getComputedStyles(element, ["overflow"]).overflow;
+        return overflow == "auto" || overflow == "scroll";
+    }
+
     (function () {
         support._scrollbar = undefined;
 
@@ -2014,6 +2031,7 @@ function pad(number, digits, end) {
                     webkit: /(chrome)[ \/]([\w.]+)/i,
                     safari: /(webkit)[ \/]([\w.]+)/i,
                     opera: /(opera)(?:.*version|)[ \/]([\w.]+)/i,
+                    edge: /(edge)[ \/]([\w.]+)/i,
                     msie: /(msie\s|trident.*? rv:)([\w.]+)/i,
                     mozilla: /(mozilla)(?:.*? rv:([\w.]+)|)/i
                 };
@@ -2039,8 +2057,16 @@ function pad(number, digits, end) {
 
         support.zoomLevel = function() {
             try {
-                return support.touch ? (document.documentElement.clientWidth / window.innerWidth) :
-                       support.browser.msie && support.browser.version >= 10 ? ((top || window).document.documentElement.offsetWidth / (top || window).innerWidth) : 1;
+                var browser = support.browser;
+                var ie11WidthCorrection = 0;
+                var docEl = document.documentElement;
+
+                if (browser.msie && browser.version == 11 && docEl.scrollHeight > docEl.clientHeight && !support.touch) {
+                    ie11WidthCorrection = support.scrollbar();
+                }
+
+                return support.touch ? (docEl.clientWidth / window.innerWidth) :
+                       browser.msie && browser.version >= 10 ? (((top || window).document.documentElement.offsetWidth + ie11WidthCorrection) / (top || window).innerWidth) : 1;
             } catch(e) {
                 return 1;
             }
@@ -2478,6 +2504,7 @@ function pad(number, digits, end) {
         wrap: wrap,
         deepExtend: deepExtend,
         getComputedStyles: getComputedStyles,
+        isScrollable: isScrollable,
         size: size,
         toCamelCase: toCamelCase,
         toHyphens: toHyphens,
@@ -2512,7 +2539,10 @@ function pad(number, digits, end) {
             }
 
             if (safe) {
+                expression = expression.replace(/"([^.]*)\.([^"]*)"/g,'"$1_$DOT$_$2"');
+                expression = expression.replace(/'([^.]*)\.([^']*)'/g,"'$1_$DOT$_$2'");
                 expression = wrapExpression(expression.split("."), paramName);
+                expression = expression.replace(/_\$DOT\$_/g, ".");
             } else {
                 expression = paramName + expression;
             }
@@ -2661,9 +2691,9 @@ function pad(number, digits, end) {
             var size = this.getSize(),
                 currentSize = this._size;
 
-            if (force || !currentSize || size.width !== currentSize.width || size.height !== currentSize.height) {
+            if (force || (size.width > 0 || size.height > 0) && (!currentSize || size.width !== currentSize.width || size.height !== currentSize.height)) {
                 this._size = size;
-                this._resize(size);
+                this._resize(size, force);
                 this.trigger("resize", size);
             }
         },
@@ -2690,7 +2720,9 @@ function pad(number, digits, end) {
             that.element.removeData("handler");
             that.unbind();
         },
-
+        _destroy: function() {
+            this.destroy();
+        },
         angular: function(){}
     });
 
@@ -3197,9 +3229,10 @@ function pad(number, digits, end) {
     }
 
     function visible(element) {
-        return !$(element).parents().addBack().filter(function() {
-            return $.css(this,"visibility") === "hidden" || $.expr.filters.hidden(this);
-        }).length;
+        return $.expr.filters.visible(element) &&
+            !$(element).parents().addBack().filter(function() {
+                return $.css(this,"visibility") === "hidden";
+            }).length;
     }
 
     $.extend($.expr[ ":" ], {
@@ -3883,7 +3916,9 @@ function pad(number, digits, end) {
     };
 
     kendo.elementUnderCursor = function(e) {
-        return document.elementFromPoint(e.x.client, e.y.client);
+        if (typeof e.x.client != "undefined") {
+            return document.elementFromPoint(e.x.client, e.y.client);
+        }
     };
 
     kendo.wheelDeltaY = function(jQueryEvent) {
@@ -4000,16 +4035,12 @@ function pad(number, digits, end) {
         return start;
     };
 
-    kendo.compileMobileDirective = function(element, scopeSetup) {
+    kendo.compileMobileDirective = function(element, scope) {
         var angular = window.angular;
 
         element.attr("data-" + kendo.ns + "role", element[0].tagName.toLowerCase().replace('kendo-mobile-', '').replace('-', ''));
 
         angular.element(element).injector().invoke(["$compile", function($compile) {
-            var scope = angular.element(element).scope();
-            if (scopeSetup) {
-                scopeSetup(scope);
-            }
             $compile(element)(scope);
 
             if (!/^\$(digest|apply)$/.test(scope.$$phase)) {
@@ -4034,6 +4065,35 @@ function pad(number, digits, end) {
         }
 
         return tokens;
+    };
+
+    kendo.cycleForm = function(form) {
+        var firstElement = form.find("input, .k-widget").first();
+        var lastElement = form.find("button, .k-button").last();
+
+        function focus(el) {
+            var widget = kendo.widgetInstance(el);
+
+            if (widget && widget.focus) {
+              widget.focus();
+            } else {
+              el.focus();
+            }
+        }
+
+        lastElement.on("keydown", function(e) {
+          if (e.keyCode == kendo.keys.TAB && !e.shiftKey) {
+            e.preventDefault();
+            focus(firstElement);
+          }
+        });
+
+        firstElement.on("keydown", function(e) {
+          if (e.keyCode == kendo.keys.TAB && e.shiftKey) {
+            e.preventDefault();
+            focus(lastElement);
+          }
+        });
     };
 
     // kendo.saveAs -----------------------------------------------

@@ -17,10 +17,6 @@
     define([ "./kendo.core", "./kendo.data.odata", "./kendo.data.xml" ], f);
 })(function(){
 
-var A = 0;
-
-
-
 /*jshint eqnull: true, loopfunc: true, evil: true */
 (function($, undefined) {
     var extend = $.extend,
@@ -272,6 +268,41 @@ var A = 0;
 
             for (; idx < length; idx++) {
                 result[idx] = callback(this[idx], idx, this);
+            }
+
+            return result;
+        },
+
+        reduce: function(callback, initialValue) {
+            var idx = 0,
+                result,
+                length = this.length;
+
+            if (arguments.length == 2) {
+                result = arguments[1];
+            } else if (idx < length) {
+                result = this[idx++];
+            }
+
+            for (; idx < length; idx++) {
+                result = callback(result, this[idx], idx, this);
+            }
+
+            return result;
+        },
+
+        reduceRight: function(callback, initialValue) {
+            var idx = this.length - 1,
+                result;
+
+            if (arguments.length == 2) {
+                result = arguments[1];
+            } else if (idx > 0) {
+                result = this[idx--];
+            }
+
+            for (; idx >= 0; idx--) {
+                result = callback(result, this[idx], idx, this);
             }
 
             return result;
@@ -1888,34 +1919,6 @@ var A = 0;
         }
     });
 
-    function cloneGroups(groups) {
-        var result = [];
-        var item;
-        var group;
-
-        for (var idx = 0, length = groups.length; idx < length; idx++) {
-            item = groups[idx];
-            if (!("field" in item && "items" in item && "value" in item)) {
-                break;
-            }
-
-            group = {};
-            for (var field in item) {
-                var shouldSerialize = item.shouldSerialize ? item.shouldSerialize : item.hasOwnProperty;
-                if (shouldSerialize.call(item, field)) {
-                    group[field] = item[field];
-                }
-            }
-
-            result.push(group);
-
-            if (group.hasSubgroups) {
-                result = result.concat(cloneGroups(group.items));
-            }
-        }
-        return result;
-    }
-
     function mergeGroups(target, dest, skip, take) {
         var group,
             idx = 0,
@@ -2070,34 +2073,10 @@ var A = 0;
         }
     }
 
-    function wrapInEmptyGroup(groups, model) {
-        var parent,
-            group,
-            idx,
-            length;
-
-        for (idx = groups.length-1, length = 0; idx >= length; idx--) {
-            group = groups[idx];
-            parent = {
-                value: model.get(group.field),
-                field: group.field,
-                items: parent ? [parent] : [model],
-                hasSubgroups: !!parent,
-                aggregates: {}
-            };
-        }
-
-        return parent;
-    }
-
     function indexOfPristineModel(data, model) {
         if (model) {
             return indexOf(data, function(item) {
-                if (item.uid) {
-                    return item.uid == model.uid;
-                }
-
-                return item[model.idField] === model.id;
+                return (item.uid && item.uid == model.uid) || (item[model.idField] === model.id && model.id !== model._defaultId);
             });
         }
         return -1;
@@ -2221,7 +2200,7 @@ var A = 0;
 
             Observable.fn.init.call(that);
 
-            that.transport = Transport.create(options, data);
+            that.transport = Transport.create(options, data, that);
 
             if (isFunction(that.transport.push)) {
                 that.transport.push({
@@ -2240,7 +2219,7 @@ var A = 0;
                             return JSON.parse(localStorage.getItem(key));
                         },
                         setItem: function(item) {
-                            localStorage.setItem(key, stringify(item));
+                            localStorage.setItem(key, stringify(that.reader.serialize(item)));
                         }
                     };
                 } else {
@@ -2274,6 +2253,10 @@ var A = 0;
             batch: false
         },
 
+        clone: function() {
+            return this;
+        },
+
         online: function(value) {
             if (value !== undefined) {
                 if (this._online != value) {
@@ -2299,7 +2282,7 @@ var A = 0;
                 return this._storage.setItem(state);
             }
 
-            return this._storage.getItem() || {};
+            return this._storage.getItem() || [];
         },
 
         _isServerGrouped: function() {
@@ -2463,7 +2446,7 @@ var A = 0;
             }
 
             if (this._isServerGrouped()) {
-                this._data.splice(index, 0, wrapInEmptyGroup(this.group(), model));
+                this._data.splice(index, 0, this._wrapInEmptyGroup(model));
             } else {
                 this._data.splice(index, 0, model);
             }
@@ -2491,7 +2474,7 @@ var A = 0;
                     var pristine = result.toJSON();
 
                     if (this._isServerGrouped()) {
-                        pristine = wrapInEmptyGroup(this.group(), pristine);
+                        pristine = this._wrapInEmptyGroup(pristine);
                     }
 
                     this._pristineData.push(pristine);
@@ -2613,6 +2596,38 @@ var A = 0;
             return model;
         },
 
+        destroyed: function() {
+            return this._destroyed;
+        },
+
+        created: function() {
+            var idx,
+                length,
+                result = [],
+                data = this._flatData(this._data);
+
+            for (idx = 0, length = data.length; idx < length; idx++) {
+                if (data[idx].isNew && data[idx].isNew()) {
+                    result.push(data[idx]);
+                }
+            }
+            return result;
+        },
+
+        updated: function() {
+            var idx,
+                length,
+                result = [],
+                data = this._flatData(this._data);
+
+            for (idx = 0, length = data.length; idx < length; idx++) {
+                if ((data[idx].isNew && !data[idx].isNew()) && data[idx].dirty) {
+                    result.push(data[idx]);
+                }
+            }
+            return result;
+        },
+
         sync: function() {
             var that = this,
                 idx,
@@ -2630,18 +2645,18 @@ var A = 0;
                     return promise;
                 }
 
-                for (idx = 0, length = data.length; idx < length; idx++) {
-                    if (data[idx].isNew()) {
-                        created.push(data[idx]);
-                    } else if (data[idx].dirty) {
-                        updated.push(data[idx]);
-                    }
-                }
+                created = that.created();
+                updated = that.updated();
 
                 var promises = [];
-                promises.push.apply(promises, that._send("create", created));
-                promises.push.apply(promises, that._send("update", updated));
-                promises.push.apply(promises, that._send("destroy", destroyed));
+
+                if (that.options.batch && that.transport.submit) {
+                    promises = that._sendSubmit(created, updated, destroyed);
+                } else {
+                    promises.push.apply(promises, that._send("create", created));
+                    promises.push.apply(promises, that._send("update", updated));
+                    promises.push.apply(promises, that._send("destroy", destroyed));
+                }
 
                 promise = $.when
                  .apply(null, promises)
@@ -2690,7 +2705,7 @@ var A = 0;
         hasChanges: function() {
             var idx,
                 length,
-                data = this._data;
+                data = this._flatData(this._data);
 
             if (this._destroyed.length) {
                 return true;
@@ -2742,7 +2757,7 @@ var A = 0;
                     models[idx].accept(response[idx]);
 
                     if (type === "create") {
-                        pristine.push(serverGroup ? wrapInEmptyGroup(that.group(), models[idx]) : response[idx]);
+                        pristine.push(serverGroup ? that._wrapInEmptyGroup(models[idx]) : response[idx]);
                     } else if (type === "update") {
                         that._updatePristineForModel(models[idx], response[idx]);
                     }
@@ -2825,6 +2840,73 @@ var A = 0;
             });
         },
 
+        _submit: function(promises, data) {
+            var that = this;
+
+            that.trigger(REQUESTSTART, { type: "submit" });
+
+            that.transport.submit(extend({
+                success: function(response, type) {
+                    var promise = $.grep(promises, function(x) {
+                        return x.type == type;
+                    })[0];
+
+                    if (promise) {
+                        promise.resolve({
+                            response: response,
+                            models: promise.models,
+                            type: type
+                        });
+                    }
+                },
+                error: function(response, status, error) {
+                    for (var idx = 0; idx < promises.length; idx++) {
+                        promises[idx].reject(response);
+                    }
+
+                    that.error(response, status, error);
+                }
+            }, data));
+        },
+
+        _sendSubmit: function(created, updated, destroyed) {
+            var that = this,
+                promises = [];
+
+            if (that.options.batch) {
+                if (created.length) {
+                    promises.push($.Deferred(function(deferred) {
+                        deferred.type = "create";
+                        deferred.models = created;
+                    }));
+                }
+
+                if (updated.length) {
+                    promises.push($.Deferred(function(deferred) {
+                        deferred.type = "update";
+                        deferred.models = updated;
+                    }));
+                }
+
+                if (destroyed.length) {
+                    promises.push($.Deferred(function(deferred) {
+                        deferred.type = "destroy";
+                        deferred.models = destroyed;
+                    }));
+                }
+
+                that._submit(promises, {
+                    data: {
+                        created: that.reader.serialize(toJSON(created)),
+                        updated: that.reader.serialize(toJSON(updated)),
+                        destroyed: that.reader.serialize(toJSON(destroyed))
+                    }
+                });
+            }
+
+            return promises;
+        },
+
         _promise: function(data, models, type) {
             var that = this;
 
@@ -2882,7 +2964,7 @@ var A = 0;
                         that.transport.read({
                             data: params,
                             success: function(data) {
-                                that.success(data);
+                                that.success(data, params);
 
                                 deferred.resolve();
                             },
@@ -2895,7 +2977,7 @@ var A = 0;
                             }
                         });
                     } else if (that.options.offlineStorage != null){
-                        that.success(that.offlineData());
+                        that.success(that.offlineData(), params);
 
                         deferred.resolve();
                     }
@@ -2938,13 +3020,23 @@ var A = 0;
                 data = that._readData(data);
 
                 var items = [];
+                var itemIds = {};
+                var model = that.reader.model;
+                var idField = model ? model.idField : "id";
+                var idx;
 
-                for (var idx = 0; idx < data.length; idx++) {
+                for (idx = 0; idx < this._destroyed.length; idx++) {
+                    var id = this._destroyed[idx][idField];
+                    itemIds[id] = id;
+                }
+
+                for (idx = 0; idx < data.length; idx++) {
                     var item = data[idx];
                     var state = item.__state__;
-
                     if (state == "destroy") {
-                       this._destroyed.push(this._createNewModel(item));
+                        if (!itemIds[item[idField]]) {
+                            this._destroyed.push(this._createNewModel(item));
+                        }
                     } else {
                         items.push(item);
                     }
@@ -3045,7 +3137,7 @@ var A = 0;
                 start = that._skip || 0,
                 end = start + that._flatData(data, true).length;
 
-            that._ranges.push({ start: start, end: end, data: data });
+            that._ranges.push({ start: start, end: end, data: data, timestamp: new Date().getTime() });
             that._ranges.sort( function(x, y) { return x.start - y.start; } );
         },
 
@@ -3132,6 +3224,16 @@ var A = 0;
             return false;
         },
 
+        _shouldWrap: function(data) {
+            var model = this.reader.model;
+
+            if (model && data.length) {
+                return !(data[0] instanceof model);
+            }
+
+            return false;
+        },
+
         _observe: function(data) {
             var that = this,
                 model = that.reader.model,
@@ -3139,13 +3241,9 @@ var A = 0;
 
             that._shouldDetachObservableParents = true;
 
-            if (model && data.length) {
-                wrap = !(data[0] instanceof model);
-            }
-
             if (data instanceof ObservableArray) {
                 that._shouldDetachObservableParents = false;
-                if (wrap) {
+                if (that._shouldWrap(data)) {
                     data.type = that.reader.model;
                     data.wrapAll(data, data);
                 }
@@ -3446,8 +3544,8 @@ var A = 0;
                 return that._filter;
             }
 
-            that._query({ filter: val, page: 1 });
             that.trigger("reset");
+            that._query({ filter: val, page: 1 });
         },
 
         group: function(val) {
@@ -3477,7 +3575,53 @@ var A = 0;
         },
 
         aggregates: function() {
-            return this._aggregateResult;
+            var result = this._aggregateResult;
+
+            if (isEmptyObject(result)) {
+                result = this._emptyAggregates(this.aggregate());
+            }
+
+            return result;
+        },
+
+        _emptyAggregates: function(aggregates) {
+            var result = {};
+
+            if (!isEmptyObject(aggregates)) {
+                var aggregate = {};
+
+                if (!isArray(aggregates)){
+                    aggregates = [aggregates];
+                }
+
+                for (var idx = 0; idx <aggregates.length; idx++) {
+                    aggregate[aggregates[idx].aggregate] = 0;
+                    result[aggregates[idx].field] = aggregate;
+                }
+            }
+
+            return result;
+        },
+
+        _wrapInEmptyGroup: function(model) {
+            var groups = this.group(),
+                parent,
+                group,
+                idx,
+                length;
+
+            for (idx = groups.length-1, length = 0; idx >= length; idx--) {
+                group = groups[idx];
+                parent = {
+                    value: model.get(group.field),
+                    field: group.field,
+                    items: parent ? [parent] : [model],
+                    hasSubgroups: !!parent,
+                    aggregates: this._emptyAggregates(group.aggregates)
+                };
+            }
+
+            return parent;
         },
 
         totalPages: function() {
@@ -3512,7 +3656,14 @@ var A = 0;
             this._skipRequestsInProgress = false;
         },
 
+        _timeStamp: function() {
+            return new Date().getTime();
+        },
+
         range: function(skip, take) {
+            this._currentRequestTimeStamp = this._timeStamp();
+            this._skipRequestsInProgress = true;
+
             skip = math.min(skip || 0, this.total());
 
             var that = this,
@@ -3520,12 +3671,10 @@ var A = 0;
                 size = math.min(pageSkip + take, that.total()),
                 data;
 
-            that._skipRequestsInProgress = false;
-
             data = that._findRange(skip, math.min(skip + take, that.total()));
 
             if (data.length) {
-                that._skipRequestsInProgress = true;
+
                 that._pending = undefined;
 
                 that._skip = skip > that.skip() ? math.min(size, (that.totalPages() - 1) * that.take()) : pageSkip;
@@ -3644,7 +3793,6 @@ var A = 0;
 
         _mergeGroups: function(data, range, skip, take) {
             if (this._isServerGrouped()) {
-                //var temp = cloneGroups(range),
                 var temp = range.toJSON(),
                     prevGroup;
 
@@ -3674,10 +3822,11 @@ var A = 0;
 
         _prefetchSuccessHandler: function (skip, size, callback, force) {
             var that = this;
+            var timestamp = that._timeStamp();
 
             return function(data) {
                 var found = false,
-                    range = { start: skip, end: size, data: [] },
+                    range = { start: skip, end: size, data: [], timestamp: that._timeStamp() },
                     idx,
                     length,
                     temp;
@@ -3691,6 +3840,7 @@ var A = 0;
                 temp = that._readData(data);
 
                 if (temp.length) {
+
                     for (idx = 0, length = that._ranges.length; idx < length; idx++) {
                         if (that._ranges[idx].start === skip) {
                             found = true;
@@ -3708,7 +3858,7 @@ var A = 0;
                 that._ranges.sort( function(x, y) { return x.start - y.start; } );
                 that._total = that.reader.total(data);
 
-                if (force || !that._skipRequestsInProgress) {
+                if (force || (timestamp >= that._currentRequestTimeStamp || !that._skipRequestsInProgress)) {
                     if (callback && temp.length) {
                         callback();
                     } else {
@@ -3740,7 +3890,11 @@ var A = 0;
                         if (!that.trigger(REQUESTSTART, { type: "read" })) {
                             that.transport.read({
                                 data: that._params(options),
-                                success: that._prefetchSuccessHandler(skip, size, callback)
+                                success: that._prefetchSuccessHandler(skip, size, callback),
+                                error: function() {
+                                    var args = slice.call(arguments);
+                                    that.error.apply(that, args);
+                                }
                             });
                         } else {
                             that._dequeueRequest();
@@ -3831,12 +3985,16 @@ var A = 0;
 
     var Transport = {};
 
-    Transport.create = function(options, data) {
+    Transport.create = function(options, data, dataSource) {
         var transport,
-            transportOptions = options.transport;
+            transportOptions = options.transport ? $.extend({}, options.transport) : null;
 
         if (transportOptions) {
             transportOptions.read = typeof transportOptions.read === STRING ? { url: transportOptions.read } : transportOptions.read;
+
+            if (dataSource) {
+                transportOptions.dataSource = dataSource;
+            }
 
             if (options.type) {
                 kendo.data.transports = kendo.data.transports || {};
@@ -3880,6 +4038,10 @@ var A = 0;
                 data = inferTable(table, fields);
             } else if (select) {
                 data = inferSelect(select, fields);
+
+                if (dataSource.group === undefined && data[0] && data[0].optgroup !== undefined) {
+                    dataSource.group = "optgroup";
+                }
             }
         }
 
@@ -3897,6 +4059,9 @@ var A = 0;
         }
 
         dataSource.data = data;
+
+        select = null;
+        dataSource.select = null;
         table = null;
         dataSource.table = null;
 
@@ -3904,22 +4069,33 @@ var A = 0;
     };
 
     function inferSelect(select, fields) {
-        var options = $(select)[0].children,
-            idx,
-            length,
-            data = [],
-            record,
-            firstField = fields[0],
-            secondField = fields[1],
-            value,
-            option;
+        select = $(select)[0];
+        var options = select.options;
+        var firstField = fields[0];
+        var secondField = fields[1];
+
+        var data = [];
+        var idx, length;
+        var optgroup;
+        var option;
+        var record;
+        var value;
 
         for (idx = 0, length = options.length; idx < length; idx++) {
             record = {};
             option = options[idx];
+            optgroup = option.parentNode;
 
-            if (option.disabled) {
+            if (optgroup === select) {
+                optgroup = null;
+            }
+
+            if (option.disabled || (optgroup && optgroup.disabled)) {
                 continue;
+            }
+
+            if (optgroup) {
+                record.optgroup = optgroup.label;
             }
 
             record[firstField.field] = option.text;

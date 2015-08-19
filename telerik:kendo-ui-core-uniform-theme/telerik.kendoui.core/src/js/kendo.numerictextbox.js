@@ -49,7 +49,8 @@
         ARIA_READONLY = "aria-readonly",
         INTEGER_REGEXP = /^(-)?(\d*)$/,
         NULL = null,
-        proxy = $.proxy;
+        proxy = $.proxy,
+        extend = $.extend;
 
     var NumericTextBox = Widget.extend({
          init: function(element, options) {
@@ -65,6 +66,8 @@
                            .attr("role", "spinbutton");
 
              options.placeholder = options.placeholder || element.attr("placeholder");
+
+             that._initialOptions = extend({}, options);
 
              that._reset();
              that._wrapper();
@@ -104,7 +107,8 @@
              value = options.value;
              that.value(value !== NULL ? value : element.val());
 
-             disabled = element.is("[disabled]");
+             disabled = element.is("[disabled]") || $(that.element).parents("fieldset").is(':disabled');
+
              if (disabled) {
                  that.enable(false);
              } else {
@@ -357,11 +361,15 @@
             if (that._old != value) {
                 that._old = value;
 
-                // trigger the DOM change event so any subscriber gets notified
-                that.element.trigger(CHANGE);
+                if (!that._typing) {
+                    // trigger the DOM change event so any subscriber gets notified
+                    that.element.trigger(CHANGE);
+                }
 
                 that.trigger(CHANGE);
             }
+
+            that._typing = false;
         },
 
         _culture: function(culture) {
@@ -419,6 +427,7 @@
 
             text[0].tabIndex = element.tabIndex;
             text[0].style.cssText = element.style.cssText;
+            text[0].title = element.title;
             text.prop("placeholder", that.options.placeholder);
 
             if (accessKey) {
@@ -441,7 +450,10 @@
                 that._step(1);
             } else if (key == keys.ENTER) {
                 that._change(that.element.val());
+            } else {
+                that._typing = true;
             }
+
         },
 
         _keypress: function(e) {
@@ -562,6 +574,7 @@
             value += that.options.step * step;
 
             that._update(that._adjust(value));
+            that._typing = false;
 
             that.trigger(SPIN);
         },
@@ -657,6 +670,8 @@
                 that._resetHandler = function() {
                     setTimeout(function() {
                         that.value(element[0].value);
+                        that.max(that._initialOptions.max);
+                        that.min(that._initialOptions.min);
                     });
                 };
 

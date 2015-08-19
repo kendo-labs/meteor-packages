@@ -17,8 +17,7 @@
     define([], f);
 })(function(){
 
-
-
+(function ($, undefined) {
 /* Filter cell operator messages */
 
 if (kendo.ui.FilterCell) {
@@ -173,6 +172,8 @@ $.extend(true, kendo.ui.Grid.prototype.options.messages,{
     "canceledit": "Annuler",
     "update": "Mettre à jour",
     "edit": "Éditer",
+    "excel": "Export to Excel",
+    "pdf": "Export to PDF",
     "select": "Sélectionner",
     "cancel": "Annuler les modifications",
     "save": "Enregistrer les modifications"
@@ -181,7 +182,8 @@ $.extend(true, kendo.ui.Grid.prototype.options.messages,{
     "confirmation": "Êtes-vous sûr de vouloir supprimer cet enregistrement?",
     "cancelDelete": "Annuler",
     "confirmDelete": "Effacer"
-  }
+  },
+  "noRecords": "Aucun enregistrement disponible."
 });
 }
 
@@ -233,6 +235,17 @@ $.extend(true, kendo.ui.FilterMenu.prototype.options.messages,{
   "cancel": "Annuler",
   "operator": "Opérateur",
   "value": "Valeur"
+});
+}
+
+/* FilterMultiCheck messages */
+
+if (kendo.ui.FilterMultiCheck) {
+kendo.ui.FilterMultiCheck.prototype.options.messages =
+$.extend(true, kendo.ui.FilterMultiCheck.prototype.options.messages,{
+  "checkAll": "Choisir toutes",
+  "clear": "Effacer filtre",
+  "filter": "Filtrer"
 });
 }
 
@@ -288,8 +301,10 @@ $.extend(true, kendo.ui.Editor.prototype.options.messages,{
   "dialogButtonSeparator": "Ou",
   "dialogCancel": "Fermer",
   "dialogInsert": "Insérer",
-  "imageAltText": "Alternate text",
+  "imageAltText": "Le texte de remplacement",
   "imageWebAddress": "Adresse Web",
+  "imageWidth": "Largeur (px)",
+  "imageHeight": "Hauteur (px)",
   "linkOpenInNewWindow": "Ouvrir dans une nouvelle fenêtre",
   "linkText": "Text",
   "linkToolTip": "Info-bulle",
@@ -309,6 +324,33 @@ $.extend(true, kendo.ui.Editor.prototype.options.messages,{
   "insertFile": "Insert file"
 });
 }
+
+/* FileBrowser and ImageBrowser messages */
+
+var browserMessages = {
+  "uploadFile" : "Charger",
+  "orderBy" : "Trier par",
+  "orderByName" : "Nom",
+  "orderBySize" : "Taille",
+  "directoryNotFound" : "Aucun répértoire de ce nom.",
+  "emptyFolder" : "Répertoire vide",
+  "deleteFile" : 'Etes-vous sûr de vouloir supprimer "{0}"?',
+  "invalidFileType" : "Le fichier sélectionné \"{0}\" n'est pas valide. Les type fichiers supportés sont {1}.",
+  "overwriteFile" : "Un fichier du nom \"{0}\" existe déjà dans ce répertoire. Voulez-vous le remplacer?",
+  "dropFilesHere" : "glissez les fichiers ici pour les charger",
+  "search" : "Recherche"
+};
+
+if (kendo.ui.FileBrowser) {
+kendo.ui.FileBrowser.prototype.options.messages =
+$.extend(true, kendo.ui.FileBrowser.prototype.options.messages, browserMessages);
+}
+
+if (kendo.ui.ImageBrowser) {
+kendo.ui.ImageBrowser.prototype.options.messages =
+$.extend(true, kendo.ui.ImageBrowser.prototype.options.messages, browserMessages);
+}
+
 
 /* Upload messages */
 
@@ -336,7 +378,9 @@ kendo.ui.Scheduler.prototype.options.messages =
 $.extend(true, kendo.ui.Scheduler.prototype.options.messages,{
   "allDay": "toute la journée",
   "cancel": "Annuler",
-  "confirmation": "Etes-vous sûr de vouloir supprimer cet élément?",
+  "editable": {
+    "confirmation": "Etes-vous sûr de vouloir supprimer cet élément?"
+  },
   "date": "Date",
   "destroy": "Effacer",
   "editor": {
@@ -381,6 +425,7 @@ $.extend(true, kendo.ui.Scheduler.prototype.options.messages,{
   "showWorkDay": "Montrer les heures ouvrables"
 });
 }
+})(window.kendo.jQuery);
 
 
 return window.kendo;

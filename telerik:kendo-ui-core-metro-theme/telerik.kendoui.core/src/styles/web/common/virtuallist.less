@@ -4,12 +4,11 @@
     position: relative;
 }
 
-.k-virtual-wrap > .k-list {
-    margin: 0;
-    padding: 0;
+.k-virtual-wrap .k-list.k-virtual-list {
+    height: auto;
 }
 
-.k-virtual-list {
+.k-virtual-content {
     overflow-y: scroll; /* has to be scroll, not auto */
     -webkit-overflow-scrolling: touch;
     position: relative;
@@ -35,36 +34,50 @@
     text-align: right;
 }
 
-.k-popup .k-list .k-item.k-virtual-item {
-    /*padding: 1px 0;*/
-}
-
-.k-virtual-list .k-virtual-item {
-    position: absolute;
-    width: 100%;
-    box-sizing: border-box;
-}
-
 .k-popup .k-item.k-first
 {
     position: relative;
 }
 
-.k-popup .k-item > .k-group {
-    background: none;
+.k-virtual-content > .k-virtual-list > .k-virtual-item {
+    position: absolute;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.k-popup .k-list .k-item > .k-group,
+.k-popup > .k-group-header,
+.k-popup > .k-virtual-wrap > .k-group-header
+{
+    text-transform: uppercase;
+    font-size: .857em;
+}
+
+.k-popup .k-list .k-item > .k-group {
     position: absolute;
     top: 0;
-    right: .3em;
+    right: 0;
+    padding: 0 .5em;
+    line-height: 1.8;
 }
 
-.k-popup .k-item.k-first,
-.k-virtual-item.k-first
+.k-popup .k-state-hover > .k-group {
+    right: -1px;
+}
+
+.k-virtual-item.k-first,
+.k-group-header + .k-list > .k-item.k-first,
+.k-static-header + .k-list > .k-item.k-first
 {
-    border-bottom-style: solid;
-    border-bottom-width: 1px;
+    border-top-style: solid;
+    border-top-width: 1px;
+    padding-top: 0;
 }
 
-.k-popup > .k-static-header
+.k-popup > .k-group-header,
+.k-popup > .k-virtual-wrap > .k-group-header
 {
     text-align: right;
 }

@@ -17,8 +17,7 @@
     define([], f);
 })(function(){
 
-
-
+(function ($, undefined) {
 /* Filter menu operator messages */
 
 if (kendo.ui.FilterCell) {
@@ -270,6 +269,8 @@ $.extend(true, kendo.ui.Grid.prototype.options.messages,{
     "create": "Yeni Kayıt Ekle",
     "destroy": "Sil",
     "edit": "Düzenle",
+    "excel": "Export to Excel",
+    "pdf": "Export to PDF",
     "save": "Değişiklikleri Kaydet",
     "select": "Seçiniz",
     "update": "Güncelle"
@@ -317,7 +318,9 @@ kendo.ui.Scheduler.prototype.options.messages =
 $.extend(true, kendo.ui.Scheduler.prototype.options.messages,{
   "allDay": "Tüm gün",
   "cancel": "İptal Et",
-  "confirmation": "Bu etkinliği silmek istediğinizden emin misiniz?",
+  "editable": {
+    "confirmation": "Bu etkinliği silmek istediğinizden emin misiniz?"
+  },
   "date": "Tarih",
   "deleteWindowTitle": "Etkinliği sil",
   "destroy": "Sil",
@@ -381,6 +384,7 @@ $.extend(true, kendo.ui.Upload.prototype.options.localization,{
   "uploadSelectedFiles": "seçilen dosyaları Yükle"
 });
 }
+})(window.kendo.jQuery);
 
 
 return window.kendo;

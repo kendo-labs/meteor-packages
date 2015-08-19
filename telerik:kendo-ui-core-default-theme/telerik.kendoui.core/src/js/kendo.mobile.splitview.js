@@ -51,7 +51,7 @@
                 kendo.mobile.init(modalViews);
             } else {
                 modalViews.each(function(idx, element) {
-                    kendo.compileMobileDirective($(element));
+                    kendo.compileMobileDirective($(element), options.$angular[0]);
                 });
             }
 
@@ -65,8 +65,12 @@
                 });
             } else {
                 that.element.children(kendo.directiveSelector("pane")).each(function() {
-                    pane = kendo.compileMobileDirective($(this));
+                    pane = kendo.compileMobileDirective($(this), options.$angular[0]);
                     that.panes.push(pane);
+                });
+
+                that.element.children(kendo.directiveSelector("header footer")).each(function() {
+                    kendo.compileMobileDirective($(this), options.$angular[0]);
                 });
             }
 

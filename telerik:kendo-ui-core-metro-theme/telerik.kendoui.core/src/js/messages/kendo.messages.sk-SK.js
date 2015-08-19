@@ -17,18 +17,7 @@
     define([], f);
 })(function(){
 
-/*
-* Kendo UI v2014.3.1316 (http://www.telerik.com/kendo-ui)
-* Copyright 2015 Telerik AD. All rights reserved.
-*
-* Kendo UI commercial licenses may be obtained at
-* http://www.telerik.com/purchase/license-agreement/kendo-ui-complete
-* If you do not own a commercial license, this file shall be governed by the trial license terms.
-*/
-(function(f, define){
-    define([], f);
-})(function(){
-
+(function ($, undefined) {
 /* FlatColorPicker messages */
 
 if (kendo.ui.FlatColorPicker) {
@@ -255,6 +244,17 @@ $.extend(true, kendo.ui.FilterMenu.prototype.options.operators,{
 });
 }
 
+/* FilterMultiCheck messages */
+
+if (kendo.ui.FilterMultiCheck) {
+    kendo.ui.FilterMultiCheck.prototype.options.messages =
+    $.extend(true, kendo.ui.FilterMultiCheck.prototype.options.messages,{
+        "checkAll": "Všetky",
+        "clear": "Vyčistiť",
+        "filter": "Filtrovať"
+    });
+}
+
 /* Gantt messages */
 
 if (kendo.ui.Gantt) {
@@ -306,6 +306,8 @@ $.extend(true, kendo.ui.Grid.prototype.options.messages,{
     "create": "Pridať nový záznam",
     "destroy": "Odstrániť",
     "edit": "Upraviť",
+    "excel": "Exportovať do Excelu",
+    "pdf": "Exportovať do PDF",
     "save": "Uložiť zmeny",
     "select": "Vybrať",
     "update": "Uložiť"
@@ -314,7 +316,8 @@ $.extend(true, kendo.ui.Grid.prototype.options.messages,{
     "cancelDelete": "Storno",
     "confirmation": "Naozaj chcete odstrániť tento záznam?",
     "confirmDelete": "Odstrániť"
-  }
+  },
+  "noRecords": "Žiadne záznamy."
 });
 }
 
@@ -470,7 +473,9 @@ $.extend(true, kendo.ui.Scheduler.prototype.options.messages,{
   "deleteWindowTitle": "Odstránenie udalosti",
   "ariaSlotLabel": "Vybraté od {0:t} do {1:t}",
   "ariaEventLabel": "{0} dňa {1:D} o {2:t}",
-  "confirmation": "Naozaj chcete odstrániť túto udalosť?",
+  "editable": {
+    "confirmation": "Naozaj chcete odstrániť túto udalosť?"
+  },
   "views": {
     "day": "Deň",
     "week": "Týždeň",
@@ -518,6 +523,28 @@ $.extend(true, kendo.ui.Slider.prototype.options,{
 });
 }
 
+/* TreeList messages */
+
+if (kendo.ui.TreeList) {
+    kendo.ui.TreeList.prototype.options.messages =
+    $.extend(true, kendo.ui.TreeList.prototype.options.messages,{
+        "noRows": "Žiadne záznamy na zobrazenie",
+        "loading": "Nahrávanie...",
+        "requestFailed": "Požiadavka zlyhala.",
+        "retry": "Znova",
+        "commands": {
+            "edit": "Upraviť",
+            "update": "Uložiť",
+            "canceledit": "Strono",
+            "create": "Pridať nový záznam",
+            "createchild": "Pridať podzáznam",
+            "destroy": "Odstrániť",
+            "excel": "Exportovať do Excelu",
+            "pdf": "Exportovať do PDF"
+        }
+    });
+}
+
 /* TreeView messages */
 
 if (kendo.ui.TreeView) {
@@ -561,14 +588,12 @@ $.extend(true, kendo.ui.Validator.prototype.options.messages,{
   "step": "{0} nie je platný údaj",
   "email": "{0} nie je platný email",
   "url": "{0} nie je platná adresa URL",
-  "date": "{0} nie je platný dátum"
+  "date": "{0} nie je platný dátum",
+  "dateCompare": "Koncový dátum musí byť väčší alebo rovný ako počiatočný"
 });
 }
+})(window.kendo.jQuery);
 
-
-return window.kendo;
-
-}, typeof define == 'function' && define.amd ? define : function(_, f){ f(); });
 
 return window.kendo;
 

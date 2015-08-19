@@ -17,8 +17,7 @@
     define([], f);
 })(function(){
 
-
-
+(function ($, undefined) {
 /* Filter cell operator messages */
 
 if (kendo.ui.FilterCell) {
@@ -185,6 +184,8 @@ $.extend(true, kendo.ui.Editor.prototype.options.messages,{
   "formatBlock": "Absatzstil",
   "imageAltText": "Abwechselnder Text",
   "imageWebAddress": "Web-Adresse",
+  "imageWidth": "Breite (px)",
+  "imageHeight": "Höhe (px)",
   "indent": "Einzug vergrößern",
   "insertHtml": "HTML einfügen",
   "insertImage": "Einfügen Bild",
@@ -226,6 +227,32 @@ $.extend(true, kendo.ui.Editor.prototype.options.messages,{
   "dialogUpdate": "Update",
   "insertFile": "Insert file"
 });
+}
+
+/* FileBrowser and ImageBrowser messages */
+
+var browserMessages = {
+  "uploadFile" : "Hochladen",
+  "orderBy" : "Sortieren nach",
+  "orderByName" : "Name",
+  "orderBySize" : "Größe",
+  "directoryNotFound" : "Das Verzeichnis wurde nicht gefunden.",
+  "emptyFolder" : "Leeres Verzeichnis",
+  "deleteFile" : 'Sind Sie sicher, dass Sie "{0}" wirklich löschen wollen?',
+  "invalidFileType" : "Die ausgewählte Datei \"{0}\" ist ungültig. Unterstützte Dateitypen sind {1}.",
+  "overwriteFile" : "Eine Datei namens \"{0}\" existiert bereits im aktuellen Ordner. Überschreiben?",
+  "dropFilesHere" : "Dateien hier verschieben",
+  "search": "Suchen"
+};
+
+if (kendo.ui.FileBrowser) {
+kendo.ui.FileBrowser.prototype.options.messages =
+$.extend(true, kendo.ui.FileBrowser.prototype.options.messages, browserMessages);
+}
+
+if (kendo.ui.ImageBrowser) {
+kendo.ui.ImageBrowser.prototype.options.messages =
+$.extend(true, kendo.ui.ImageBrowser.prototype.options.messages, browserMessages);
 }
 
 /* FilterCell messages */
@@ -270,6 +297,8 @@ $.extend(true, kendo.ui.Grid.prototype.options.messages,{
     "create": "Neuen Datensatz hinzufügen",
     "destroy": "Löschen",
     "edit": "Bearbeiten",
+    "excel": "Export to Excel",
+    "pdf": "Export to PDF",
     "save": "Änderungen speichern",
     "select": "Wähle",
     "update": "Aktualisiere"
@@ -278,7 +307,8 @@ $.extend(true, kendo.ui.Grid.prototype.options.messages,{
     "confirmation": "Sind Sie sicher, dass Sie diesen Datensatz löschen wollen?",
     "cancelDelete": "Abbrechen",
     "confirmDelete": "Löschen"
-  }
+  },
+  "noRecords": "Keine Aufzeichnungen zur Verfügung."
 });
 }
 
@@ -331,6 +361,7 @@ $.extend(true, kendo.ui.Upload.prototype.options.localization,{
   "retry": "Wiederholen",
   "select": "Wählen Sie...",
   "statusFailed": "nicht erfolgreich",
+  "statusWarning": "warnung",
   "statusUploaded": "hochgeladet",
   "statusUploading": "hochladen",
   "uploadSelectedFiles": "Dateien hochladen",
@@ -346,14 +377,18 @@ kendo.ui.Scheduler.prototype.options.messages =
 $.extend(true, kendo.ui.Scheduler.prototype.options.messages,{
   "allDay": "Ganzer Tag",
   "cancel": "Abbrechen",
-  "confirmation": "Möchten Sie diesen Termin wirklich löschen?",
   "date": "Datum",
   "destroy": "Löschen",
+  "pdf": "Exportieren als PDF",
+  "editable": {
+    "confirmation": "Möchten Sie diesen Termin wirklich löschen?"
+  },
   "editor": {
     "allDayEvent": "Ganztägiger Termin",
     "description": "Beschreibung",
     "editorTitle": "Termin",
     "end": "Beenden",
+    "timezoneTitle": "Zeitzone",
     "endTimezone": "Zeitzone Ende",
     "repeat": "Wiederholen",
     "separateTimezones": "Unterschiedliche Start- und Endzeitzonen benutzen",
@@ -371,7 +406,7 @@ $.extend(true, kendo.ui.Scheduler.prototype.options.messages,{
     "deleteWindowOccurrence": "Diesen Termin löschen",
     "deleteWindowSeries": "Alle Wiederholungen des Termins löschen",
     "deleteWindowTitle": "Diesen Termin und alle Wiederholungen löschen",
-    "editRecurring": "Möchten Sie nur diesen Termin oder alle Wiederholungen löschen?",
+    "editRecurring": "Möchten Sie nur diesen Termin oder alle Wiederholungen bearbeiten?",
     "editWindowOccurrence": "Aktuelles Ereignis bearbeiten",
     "editWindowSeries": "Serie bearbeiten",
     "editWindowTitle": "Wiederholungs-Eintrag bearbeiten"
@@ -384,11 +419,17 @@ $.extend(true, kendo.ui.Scheduler.prototype.options.messages,{
     "day": "Tag",
     "month": "Monat",
     "week": "Woche",
-    "workWeek": "Arbeitswoche"
+    "workWeek": "Arbeitswoche",
+    "timeline": "Zeitstrahl",
+    "timelineWeek": "Zeitstrahl Woche",
+    "timelineWorkWeek": "Zeitstrahl Arbeitswoche",
+    "timelineMonth": "Zeitstrahl Monat"
   },
   "deleteWindowTitle": "Termin löschen",
   "showFullDay": "Ganzen Tag anzeigen",
-  "showWorkDay": "Geschäftszeiten anzeigen"
+  "showWorkDay": "Geschäftszeiten anzeigen",
+  "ariaSlotLabel": "Ausgewählt von {0:t} bis {1:t}",
+  "ariaEventLabel": "{0} am {1:D} um {2:t}"
 });
 }
 
@@ -407,6 +448,7 @@ $.extend(true, kendo.ui.Validator.prototype.options.messages,{
   "date": "{0} ist kein gültiges Datum"
 });
 }
+})(window.kendo.jQuery);
 
 
 return window.kendo;

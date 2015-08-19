@@ -188,6 +188,15 @@ span.k-dropdown,
     right: 3px;
 }
 
+/*prevent missing bottom border at some zoom levels*/
+span.k-textbox:after
+{
+  content: "\a0";
+  display: block;
+  height: .4px;
+  overflow: hidden;
+}
+
 .k-autocomplete,
 .k-dropdown-wrap.k-state-focused,
 .k-dropdown-wrap.k-state-hover,
@@ -223,8 +232,6 @@ span.k-dropdown,
 {
     background: transparent;
 }
-
-.k-ie7 .k-picker-wrap .k-input, .k-ie7 .k-numeric-wrap .k-input, .k-ie7 .k-combobox .k-input { margin: -1px 0; } /* removes excessive spacing */
 
 .k-picker-wrap .k-select,
 .k-numeric-wrap .k-select,
@@ -297,16 +304,23 @@ span.k-datetimepicker .k-select+.k-select
     margin: 0;
 }
 
-/* fix missing bottom border on browser zoom in Chrome */
-.k-webkit .k-combobox .k-dropdown-wrap:before,
-.k-webkit .k-picker-wrap:before,
-.k-webkit .k-numeric-wrap:before
+.k-combobox .k-dropdown-wrap:before,
+.k-picker-wrap:before,
+.k-numeric-wrap:before
 {
     content: "\a0";
     display: inline-block;
     width: 0;
     height: @input-height;
-    padding-bottom: 0.4em;
+    padding-bottom: 0.3em;
+}
+
+/* fix missing bottom border on browser zoom in Chrome */
+.k-webkit .k-combobox .k-dropdown-wrap:before,
+.k-webkit .k-picker-wrap:before,
+.k-webkit .k-numeric-wrap:before
+{
+    padding-bottom: 0.38em;
 }
 
 /* above style breaks NumericTextBox layout due display:block style applied to the input */
@@ -322,15 +336,6 @@ span.k-datetimepicker .k-select+.k-select
 .k-numeric-wrap .k-input
 {
     display: inline;
-}
-
-.k-ie7 .k-autocomplete .k-input,
-.k-ie7 .k-picker-wrap .k-input,
-.k-ie7 .k-numeric-wrap .k-input,
-.k-ie7 .k-dropdown-wrap .k-input,
-.k-ie7 .k-selectbox .k-input
-{
-    text-indent: 0;
 }
 
 .k-picker-wrap .k-select,
@@ -354,15 +359,6 @@ span.k-datetimepicker .k-select+.k-select
 body .k-datetimepicker .k-select
 {
     border-radius: 0;
-}
-
-.k-ie7 .k-picker-wrap .k-icon,
-.k-ie7 .k-dropdown-wrap .k-icon
-{
-    line-height: 2em;
-    font-size: 1em;
-    padding-top: 16px;
-    height: 0;
 }
 
 .k-combobox .k-icon,
@@ -397,14 +393,16 @@ body .k-datetimepicker .k-select
 .k-popup .k-list .k-item,
 .k-fieldselector .k-list .k-item,
 .k-list-optionlabel,
-.k-popup > .k-static-header
+.k-popup > .k-group-header,
+.k-popup > .k-virtual-wrap > .k-group-header
 {
     padding: 1px 5px 1px 5px;
     line-height: 1.8em;
     min-height: 1.8em;
 }
 
-.k-popup > .k-static-header
+.k-popup > .k-group-header,
+.k-popup > .k-virtual-wrap > .k-group-header
 {
     padding-right: 22px;
 }
@@ -451,8 +449,8 @@ body .k-datetimepicker .k-select
 .k-list-filter > .k-icon
 {
     position: absolute;
-    right: 4px;
-    top: 3px;
+    right: 6px;
+    top: 1px;
 }
 
 /* MultiSelect */
@@ -483,9 +481,10 @@ body .k-datetimepicker .k-select
 .k-multiselect-wrap li
 {
     margin: 1px 0 1px 1px;
-    padding: .1em .15em .1em .4em;
+    padding: .1em 1.6em .1em .4em;
     line-height: (@input-height - .15);
     float: left;
+    position: relative;
 }
 
 .k-autocomplete .k-loading,
@@ -499,6 +498,15 @@ body .k-datetimepicker .k-select
 .k-multiselect .k-loading-hidden
 {
     visibility: hidden;
+}
+
+.k-multiselect-wrap .k-select
+{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    padding: .1em .2em;
 }
 
 /* Date/Time Pickers */
@@ -560,6 +568,11 @@ body .k-datetimepicker .k-select
 .k-textbox
 {
     outline: 0;
+}
+
+input.k-textbox,
+textarea.k-textbox
+{
     padding: 2px .3em;
 }
 
@@ -580,17 +593,9 @@ input.k-textbox
     height: 2.17em;
 }
 
-.k-ie7 input.k-textbox { line-height: 1.72em; height: 1.72em; text-indent: @input-indent; }
-
 textarea.k-textbox
 {
     height: auto;
-}
-
-.k-ie7 .k-textbox
-{
-    padding: 1px 0;
-    text-indent: 0;
 }
 
 /* NumericTextBox */
@@ -665,7 +670,7 @@ span.k-numerictextbox
             border-radius: 0 !important;
         }
     }
-    .k-icon {
+    .k-select {
         cursor: pointer;
     }
 }
@@ -876,7 +881,7 @@ span.k-numerictextbox
     }
 }
 
-.k-ie7, .k-ie8 {
+.k-ie8 {
     .k-flatcolorpicker {
         .k-hue-slider {
             .k-slider-track {

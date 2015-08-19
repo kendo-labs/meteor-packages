@@ -17,6 +17,7 @@
     define([], f);
 })(function(){
 
+(function ($, undefined) {
 /* FlatColorPicker messages */
 
 if (kendo.ui.FlatColorPicker) {
@@ -275,6 +276,8 @@ $.extend(true, kendo.ui.Grid.prototype.options.messages,{
     "create": "新增",
     "destroy": "删除",
     "edit": "编辑",
+    "excel": "Export to Excel",
+    "pdf": "Export to PDF",
     "save": "保存",
     "select": "选择",
     "update": "更新"
@@ -283,7 +286,8 @@ $.extend(true, kendo.ui.Grid.prototype.options.messages,{
     "cancelDelete": "取消",
     "confirmation": "确定要删除吗？",
     "confirmDelete": "删除"
-  }
+  },
+  "noRecords": "没有可用的记录。"
 });
 }
 
@@ -293,6 +297,25 @@ if (kendo.ui.Groupable) {
 kendo.ui.Groupable.prototype.options.messages =
 $.extend(true, kendo.ui.Groupable.prototype.options.messages,{
   "empty": "拖拽列标题到此处按列组合显示"
+});
+}
+
+/* ImageBrowser messages */
+
+if (kendo.ui.ImageBrowser) {
+kendo.ui.ImageBrowser.prototype.options.messages =
+$.extend(true, kendo.ui.ImageBrowser.prototype.options.messages,{
+  "uploadFile": "上传",
+  "orderBy": "排序条件",
+  "orderByName": "名称",
+  "orderBySize": "大小",
+  "directoryNotFound": "此文件夹未找到",
+  "emptyFolder": "文件夹为空",
+  "deleteFile": '您确定要删除 \"{0}\"?',
+  "invalidFileType": "选中的文件 \"{0}\" 非法，支持的文件类型为 {1}。",
+  "overwriteFile": "当前文件夹已存在文件名为 \"{0}\" 的文件，您确定要覆盖么？",
+  "dropFilesHere": "拖拽要上传的文件到此处",
+  "search": "搜索"
 });
 }
 
@@ -407,9 +430,18 @@ $.extend(true, kendo.ui.Scheduler.prototype.options.messages,{
   "save": "保存",
   "cancel": "取消",
   "destroy": "删除",
+  "allDay": "整天",
+  "date": "日期",
+  "event": "事件",
+  "time": "時間",
+  "showFullDay": "顯示整天",
+  "showWorkDay": "顯示營業時間",
   "deleteWindowTitle": "删除事件",
   "ariaSlotLabel": "选择从 {0:t} 到 {1:t}",
   "ariaEventLabel": "{0} on {1:D} at {2:t}",
+  "editable": {
+    "confirmation": "你確定你要刪除這個活動？"
+  },
   "views": {
     "day": "日",
     "week": "周",
@@ -423,7 +455,9 @@ $.extend(true, kendo.ui.Scheduler.prototype.options.messages,{
     "deleteWindowSeries": "删除序列",
     "editWindowTitle": "修改周期条目",
     "editWindowOccurrence": "修改当前事件",
-    "editWindowSeries": "修改序列"
+    "editWindowSeries": "修改序列",
+    "deleteRecurring": "你想刪除僅此事件發生或整個系列？",
+    "editRecurring": "你想，僅編輯此次事件發生或整個系列？"
   },
   "editor": {
     "title": "标题",
@@ -501,6 +535,7 @@ $.extend(true, kendo.ui.Validator.prototype.options.messages,{
   "date": "{0} 不是合法的日期"
 });
 }
+})(window.kendo.jQuery);
 
 
 return window.kendo;

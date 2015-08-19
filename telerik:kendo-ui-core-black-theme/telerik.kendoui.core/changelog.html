@@ -1,10 +1,9 @@
 
-
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Changelog for Kendo UI v2015.1.318</title>
+    <title>Changelog for Kendo UI v2015.2.805 (August 05, 2015)</title>
     <style>
         html, body {
             margin: 0;
@@ -26,6 +25,17 @@
 
             margin: 1.2em 0 .3em;
             padding-bottom: .2em;
+        }
+
+        .breaking {
+            background-color: #e10c01;
+            color: #fff;
+            border-radius: 3px;
+            padding: 3px 4px;
+            display: inline-block;
+            font-size: 11px;
+            line-height: 1;
+            font-weight: bold;
         }
 
         #page {
@@ -52,131 +62,322 @@
 </head>
 <body>
     <div id="page">
-        <h1 class="title">Release notes for Kendo UI v2015.1.318</h1>
+        <h1 class="title">Release notes for Kendo UI v2015.2.805</h1>
 
         <h1>Components</h1>
         <div class="tClear poTopLine">
             <div class="poBoxIconText">
                 
-                <p><strong>What's fixed</strong></p><ul><li>view with eval template messes up the content</li></ul>
+                
             </div>
         </div>
 
 
         <div class="tClear poTopLine">
             <h2>AngularJS</h2>
-            <p><strong>What's new</strong></p><ul><li>Support for scope member export with element directives</li></ul>
-            <p><strong>What's fixed</strong></p><ul><li>Angular templates are not persisted after rebind</li></ul>
+            
+            <p><strong>What's fixed</strong></p>
+<ul>
+<li>Setting widget options in link function of custom directive will not reflect the widget</li>
+<li>Using k-ng-disabled causes an error - $apply is in progress</li>
+</ul>
         </div>
         <div class="tClear poTopLine">
             <h2>AutoComplete</h2>
-            <p><strong>What's new</strong></p><ul><li>Implement k-ng-disabled/k-ng-readonly to support disabled/readonly in older browsers</li></ul>
             
+            <p><strong>What's fixed</strong></p>
+<ul>
+<li>Widget does not update ViewModel with ObservableObject when data source is grouped</li>
+</ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>Button</h2>
+            
+            <p><strong>What's fixed</strong></p>
+<ul>
+<li>PanelBar sprite styles break nested Button sprite styles</li>
+</ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>ColorPicker</h2>
+            
+            <p><strong>What's fixed</strong></p>
+<ul>
+<li>Material Theme: ColorPicker not opened accordingly</li>
+</ul>
         </div>
         <div class="tClear poTopLine">
             <h2>ComboBox</h2>
-            <p><strong>What's new</strong></p><ul><li>Implement k-ng-disabled/k-ng-readonly to support disabled/readonly in older browsers</li></ul>
-            
+            <p><strong>What's new</strong></p>
+<ul>
+<li>Widget should clear its value when parent's value is not relevant</li>
+</ul>
+            <p><strong>What's fixed</strong></p>
+<ul>
+<li>Widget with AutoBind false does not select correct item</li>
+<li>Widget does not update ViewModel with ObservableObject when data source is grouped</li>
+</ul>
         </div>
         <div class="tClear poTopLine">
             <h2>DataSource</h2>
-            <p><strong>What's new</strong></p><ul><li>RequestEnd event does not have its type set when triggered from query method</li></ul>
-            <p><strong>What's fixed</strong></p><ul><li>Groups are not correctly merged when fetching range for the second page with multiple levels of grouping and server operations</li><li>Custom datasource filter operators don't support string and date values</li></ul>
+            
+            <p><strong>What's fixed</strong></p>
+<ul>
+<li>A phantom item is created when empty offline DataSource is fetched with model fields declaration</li>
+<li>Canceling the changes after calling read in offline mode removes items</li>
+</ul>
         </div>
         <div class="tClear poTopLine">
-            <h2>DatePicker</h2>
-            <p><strong>What's new</strong></p><ul><li>Implement k-ng-disabled/k-ng-readonly to support disabled/readonly in older browsers</li></ul>
+            <h2>Draggable</h2>
             
+            <p><strong>What's fixed</strong></p>
+<ul>
+<li>"dragcancel" is fired when "dragstart" is prevented via e.preventDefault</li>
+<li>AutoScroll Scrollable feature not working for the Kendo UI Grid</li>
+</ul>
         </div>
         <div class="tClear poTopLine">
-            <h2>DateTimePicker</h2>
-            <p><strong>What's new</strong></p><ul><li>Implement k-ng-disabled/k-ng-readonly to support disabled/readonly in older browsers</li></ul>
+            <h2>Drawing</h2>
             
+            <p><strong>What's fixed</strong></p>
+<ul>
+<li>An error is thrown when parsing a path that contains numbers with exponent</li>
+</ul>
         </div>
         <div class="tClear poTopLine">
             <h2>DropDownList</h2>
-            <p><strong>What's new</strong></p><ul><li>Implement k-ng-disabled/k-ng-readonly to support disabled/readonly in older browsers</li></ul>
-            <p><strong>What's fixed</strong></p><ul><li>DropDownList keyboard navigation does not work in IE</li></ul>
+            <p><strong>What's new</strong></p>
+<ul>
+<li>Widget should clear its value when parent's value is not relevant</li>
+</ul>
+            <p><strong>What's fixed</strong></p>
+<ul>
+<li>Widget calls select predicate incorrectly</li>
+<li>Widget triggers cascade event twice when in cascading change and MVVM source is used</li>
+<li>Widget with AutoBind false does not select correct item</li>
+<li>Widget does not update ViewModel with ObservableObject when data source is grouped</li>
+</ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>Gantt</h2>
+            
+            <p><strong>What's fixed</strong></p>
+<ul>
+<li>With column date format to "dd / MM / yyyy HH: mm" validator does not take it into account upon cell edit</li>
+<li>FIX: "Add Task" drop down is not sized correctly when custom toolbar is used.</li>
+<li>Scrolling the Treelist doesn't work in iPad</li>
+<li>Cell edit validation doesn't prevent other interactions with the gantt (such as move or open edit form), which causes issues</li>
+</ul>
         </div>
         <div class="tClear poTopLine">
             <h2>Globalization</h2>
-            <p><strong>What's new</strong></p><ul><li>Update Kendo UI culture script files using Windows 8 globalization information</li><li>Scheduler widget translations</li><li>German translation for NumericTextBox</li></ul>
             
+            <p><strong>What's fixed</strong></p>
+<ul>
+<li>Dates with July full moth name are not parsed correctly when using the cs-CZ culture</li>
+</ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>Linear Gauge</h2>
+            
+            <p><strong>What's fixed</strong></p>
+<ul>
+<li>Exported SVG document has dimensions set in percents resulting in incorrect clipping</li>
+</ul>
         </div>
         <div class="tClear poTopLine">
             <h2>ListView</h2>
             
-            <p><strong>What's fixed</strong></p><ul><li>ListView doesn't re-compile angular templates on destroying the editor</li><li>Removing item from the ListView doesn't revert edited item </li></ul>
+            <p><strong>What's fixed</strong></p>
+<ul>
+<li>Save event is triggered when validation fails</li>
+<li>Pager info text falls to a second line when responsive mode is triggered in Chrome</li>
+</ul>
         </div>
         <div class="tClear poTopLine">
             <h2>MVVM</h2>
             
-            <p><strong>What's fixed</strong></p><ul><li>checkbox checked binding does not work with the value binding</li><li>MVVM binding in template lost on node collapse</li></ul>
-        </div>
-        <div class="tClear poTopLine">
-            <h2>MaskedTextBox</h2>
-            <p><strong>What's new</strong></p><ul><li>Optional way to post widget's raw value</li><li>Unmask method</li></ul>
-            
-        </div>
-        <div class="tClear poTopLine">
-            <h2>MobileButton</h2>
-            <p><strong>What's new</strong></p><ul><li>Allow mobile buttons to trigger on press </li></ul>
-            
+            <p><strong>What's fixed</strong></p>
+<ul>
+<li>Widget with AutoBind false does not select correct item</li>
+<li>Widget does not update ViewModel with ObservableObject when data source is grouped</li>
+</ul>
         </div>
         <div class="tClear poTopLine">
             <h2>MobileListView</h2>
-            <p><strong>What's new</strong></p><ul><li>The listview should not redraw its item if MVVM bound</li></ul>
-            <p><strong>What's fixed</strong></p><ul><li>ListView filtering does not clear filter box when datasource filters are cleared</li><li>Popover within a ModalView shows under the ModalView</li><li>Changed Kendo.mobile.ui.ListView.filterable.operator default from 'start...</li></ul>
+            
+            <p><strong>What's fixed</strong></p>
+<ul>
+<li>listview angular compilation is performed before the items are inserted into the DOM</li>
+</ul>
         </div>
         <div class="tClear poTopLine">
-            <h2>MobileView</h2>
-            <p><strong>What's new</strong></p><ul><li>calling preventDefault() in beforeHide event handler should cancel navigation</li></ul>
+            <h2>MobileTabStrip</h2>
             
+            <p><strong>What's fixed</strong></p>
+<ul>
+<li>TabStrip icons not aligned in Android 5.1</li>
+</ul>
         </div>
         <div class="tClear poTopLine">
             <h2>MultiSelect</h2>
-            <p><strong>What's new</strong></p><ul><li>Implement k-ng-disabled/k-ng-readonly to support disabled/readonly in older browsers</li></ul>
+            
+            <p><strong>What's fixed</strong></p>
+<ul>
+<li>Widget in 'Single' tag mode does not update the underlying SELECT value</li>
+<li>Widget with virtualization does not clear the selected item in the SELECT element</li>
+<li>Item close button placement is incorrect in RTL mode</li>
+<li>Widget list keeps selected items after filtering</li>
+<li>Widget with autoBind:false does not select the correct items when set via value method</li>
+<li>Virtualized widget with autoBind:false does not update the underlying SELECT element when delete a tag</li>
+<li>Widget does not update ViewModel with ObservableObject when data source is grouped</li>
+</ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>Notification</h2>
+            <p><strong>What's new</strong></p>
+<ul>
+<li>New notification popups should ignore old ones that are currently being hidden when calculating their position</li>
+</ul>
             
         </div>
         <div class="tClear poTopLine">
-            <h2>NumericTextBox</h2>
-            <p><strong>What's new</strong></p><ul><li>Implement k-ng-disabled/k-ng-readonly to support disabled/readonly in older browsers</li></ul>
+            <h2>PDF Export</h2>
             
+            <p><strong>What's fixed</strong></p>
+<ul>
+<li>[PDF] Bad auto page breaks in grid widget</li>
+</ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>Pager</h2>
+            
+            <p><strong>What's fixed</strong></p>
+<ul>
+<li>Setting page size All with upper-case letter does not work correctly in all cases</li>
+</ul>
         </div>
         <div class="tClear poTopLine">
             <h2>PanelBar</h2>
             
-            <p><strong>What's fixed</strong></p><ul><li>JavaScript error when all panels of a PanelBar are disabled</li></ul>
+            <p><strong>What's fixed</strong></p>
+<ul>
+<li>PanelBar sprite styles break nested Button sprite styles</li>
+</ul>
         </div>
         <div class="tClear poTopLine">
-            <h2>PopOver</h2>
+            <h2>PivotGrid</h2>
+            <p><strong>What's new</strong></p>
+<ul>
+<li>Support for 100% height of PivotConfigurator</li>
+</ul>
+            <p><strong>What's fixed</strong></p>
+<ul>
+<li>Widget does not merge data correctly when expand second dimension of column root tuple</li>
+<li>Widget does not merge data correctly when expand second dimension of row root tuple</li>
+<li>Client cube does not support dimension expanding when parent dimension is boolean</li>
+<li>Widget expanding throws an error "Cannot read property 'value' of undefined"</li>
+</ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>ProgressBar</h2>
             
-            <p><strong>What's fixed</strong></p><ul><li>Popover within a ModalView shows under the ModalView</li></ul>
+            <p><strong>What's fixed</strong></p>
+<ul>
+<li>ProgressBar may display 99% instead of 100% if JS floating point calculations fail</li>
+</ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>Radial Gauge</h2>
+            
+            <p><strong>What's fixed</strong></p>
+<ul>
+<li>Exported SVG document has dimensions set in percents resulting in incorrect clipping</li>
+</ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>ResponsivePanel</h2>
+            
+            <p><strong>What's fixed</strong></p>
+<ul>
+<li>Different ResponsivePanel instances should be able to work with different breakpoints</li>
+<li>ResponsivePanel with "top" orientation does not allow overflowing, e.g. when using a Menu</li>
+</ul>
         </div>
         <div class="tClear poTopLine">
             <h2>ScrollView</h2>
             
-            <p><strong>What's fixed</strong></p><ul><li>ScrollView template demo is broken</li></ul>
+            <p><strong>What's fixed</strong></p>
+<ul>
+<li>Scrollview does not handle filtering of the datasource</li>
+<li>scrollview initial change event provides the wrong element</li>
+</ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>Slider</h2>
+            
+            <p><strong>What's fixed</strong></p>
+<ul>
+<li>Browser crashes if smallStep is set to zero. From now, on a JS error will be thrown</li>
+</ul>
         </div>
         <div class="tClear poTopLine">
             <h2>Splitter</h2>
             
-            <p><strong>What's fixed</strong></p><ul><li>Splitter should not trigger page scrollbars during resize</li></ul>
+            <p><strong>What's fixed</strong></p>
+<ul>
+<li>Splitter applies additional styling to some elements in IE</li>
+<li>Invisible resize overlays not removed in IE8 after pane collapse or expand</li>
+</ul>
         </div>
         <div class="tClear poTopLine">
-            <h2>TimePicker</h2>
-            <p><strong>What's new</strong></p><ul><li>Implement k-ng-disabled/k-ng-readonly to support disabled/readonly in older browsers</li></ul>
+            <h2>Switch</h2>
             
+            <p><strong>What's fixed</strong></p>
+<ul>
+<li>listview angular compilation is performed before the items are inserted into the DOM</li>
+</ul>
         </div>
         <div class="tClear poTopLine">
-            <h2>Touch</h2>
+            <h2>ToolBar</h2>
             
-            <p><strong>What's fixed</strong></p><ul><li>Widget "visible" binding does not work with kendoTouch</li></ul>
+            <p><strong>What's fixed</strong></p>
+<ul>
+<li>Error when defining toolbar item with template</li>
+<li>Split buttons and overflow container open with wrong positioning in RTL mode</li>
+<li>Toggle method do not work when called with false</li>
+<li>items.attributes option clears the internal Kendo ToolBar button classes</li>
+</ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>Tooltip</h2>
+            
+            <p><strong>What's fixed</strong></p>
+<ul>
+<li>Wrong Tooltip background in Q2'15</li>
+</ul>
         </div>
         <div class="tClear poTopLine">
             <h2>TreeList</h2>
+            <p><strong>What's new</strong></p>
+<ul>
+<li>Orignal field is lost when defining parentId in the TreeList model</li>
+</ul>
+            <p><strong>What's fixed</strong></p>
+<ul>
+<li>Input selection is not allowed when row drag&amp;drop is enabled</li>
+<li>Drag&amp;drop does not work for widget without id attribute</li>
+<li>TreeList template column does not update when used with angular</li>
+</ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>Window</h2>
             
-            <p><strong>What's fixed</strong></p><ul><li>New child items do not have proper default values</li><li>TreeList create command is not correctly executed when widget is inside table row</li><li>Cannot add child item of leaf node in TreeList with server operations</li></ul>
+            <p><strong>What's fixed</strong></p>
+<ul>
+<li>k-rebind does not update window options</li>
+<li>Closing nested custom window widgets removes the modal overlay for the outer one</li>
+</ul>
         </div>
     </div>
 </body>

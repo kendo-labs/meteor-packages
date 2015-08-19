@@ -1,7 +1,7 @@
 Package.describe({
   name: "telerik:kendo-ui-core-materialblack-theme",
   summary: "Kendo UI Core is the free & open-source version of Kendo UI, the web's best UI widgets!",
-  version: "2015.1.318",
+  version: "2015.2.805",
   git: 'https://github.com/kendo-labs/meteor-packages.git',
   documentation:'README.md'
 });

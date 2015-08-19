@@ -43,8 +43,8 @@
     padding: 0;
 }
 
-.k-tabstrip > .k-content,
-.k-panelbar .k-tabstrip > .k-content
+.k-tabstrip > div.k-content,
+.k-panelbar .k-tabstrip > div.k-content
 {
     margin: 0;
 }
@@ -58,23 +58,50 @@
     margin-top: 12px;
 }
 
-.k-panelbar .k-sprite {
+.k-panelbar .k-link > .k-sprite {
     margin-top: 16px;
 }
 
-.k-tabstrip-items .k-tab-on-top,
-.k-tabstrip-items .k-state-active {
-    margin-bottom: -2px;
-    padding-bottom: 0;
-}
-
-.k-tabstrip-items > .k-item {
-    border-bottom-width: 2px;
-    border-bottom-style: solid;
+.k-tabstrip > .k-tabstrip-items > .k-item {
     text-transform: uppercase;
+    border-width: 0;
+    border-style: solid;
+    padding: 0;
 }
 
-.k-tabstrip-items .k-link {
+.k-tabstrip-left > .k-tabstrip-items .k-loading,
+.k-tabstrip-right > .k-tabstrip-items .k-loading
+{
+    display: none;
+}
+
+.k-tabstrip-top > .k-tabstrip-items .k-tab-on-top,
+.k-tabstrip-top > .k-tabstrip-items .k-state-active {
+    margin-bottom: -1px;
+}
+
+.k-tabstrip-top > .k-tabstrip-items > .k-item {
+    border-bottom-width: 2px;
+}
+
+.k-tabstrip-left > .k-tabstrip-items .k-tab-on-top,
+.k-tabstrip-left > .k-tabstrip-items .k-state-active {
+    margin-right: -2px;
+}
+
+.k-tabstrip-left > .k-tabstrip-items > .k-item {
+    border-right-width: 2px;
+}
+
+.k-tabstrip-right > .k-tabstrip-items > .k-item {
+    border-left-width: 2px;
+}
+
+.k-tabstrip-bottom > .k-tabstrip-items > .k-item {
+    border-top-width: 2px;
+}
+
+.k-tabstrip .k-tabstrip-items .k-link {
     padding: 1.071em;
 }
 
@@ -90,9 +117,12 @@
 }
 
 .k-grid-header th.k-header,
-.k-filter-row th
-{
-    padding: .429em .6em .571em .6em;
+.k-filter-row th {
+    padding: .786em .6em;
+}
+
+.k-grid-header th.k-header {
+  padding-left: 1.286em;
 }
 
 .k-filtercell > span {
@@ -109,6 +139,31 @@
 .k-filter-row .k-dropdown-operator {
     width: 2.714em;
     right: 2.857em;
+}
+
+.k-filter-menu {
+    padding: .5em .5em 0;
+}
+
+.k-filter-menu .k-button {
+    margin: 0;
+    width: 50%;
+    border-radius: 0;
+}
+
+.k-filter-menu .k-primary {
+    float: right;
+}
+
+.k-filter-menu > div > div:last-child {
+    margin: .5em -.5em 0;
+    border-top-width: 1px;
+    border-top-style: solid;
+}
+
+.k-filter-menu .k-primary {
+   border-left-width: 1px;
+   border-left-style: solid;
 }
 
 .k-grouping-header .k-group-indicator
@@ -131,9 +186,10 @@
 }
 
 .k-grid-header th.k-header>.k-link {
-    font-size: 0.929em;
-    padding: 0.462em 1.286em;
-    margin-top: 0;
+    padding: 0;
+    margin: 0;
+    min-height: 16px;
+    line-height: inherit;
 }
 
 .k-grouping-header
@@ -365,13 +421,18 @@
 
 .k-multiselect-wrap li {
     border-radius: 1.071em;
-    margin: 3px;
-    padding: 0 .15em 0 .857em;
+    margin: 3px 0 3px 3px;
+    padding: 0 1.6em 0 .857em;
     line-height: 1.86em;
 }
 
 .k-multiselect-wrap li span {
-    margin-right: 1.071em;   
+    margin-right: .4em;   
+}
+
+.k-multiselect-wrap .k-select
+{
+    padding-top: 0;
 }
 
 .k-numeric-wrap .k-select {
@@ -538,10 +599,6 @@ div.editorToolbarWindow.k-window-content {
 
 .k-file {
     padding: 0.357em .167em 0.357em .8em;
-}
-
-.k-scheduler-table td {
-	vertical-align: middle;
 }
 
 .k-scheduler-table td,
@@ -916,8 +973,8 @@ div.editorToolbarWindow.k-window-content {
 
 .k-grid-header .k-grid-filter,
 .k-grid-header .k-header-column-menu {
-    padding: .357em .6em .5em .6em;
-    margin: 0 0 -.4em -.6em;
+    padding: .714em;
+    margin: -.786em -.6em;
 }
 
 .k-grid-header .k-header-column-menu .k-i-arrowhead-s {
@@ -1016,6 +1073,10 @@ div.editorToolbarWindow.k-window-content {
 
     .k-i-expand {
         background-position: 0 0;
+    }
+
+    .k-si-close {
+        //background-position: -176px -80px;
     }
 }
 
@@ -1128,11 +1189,19 @@ div.editorToolbarWindow.k-window-content {
 }
 
 .km-pane-wrapper .k-pager-numbers .k-link,
-.km-pane-wrapper .k-pager-numbers .k-state-selected,
 .km-pane-wrapper .k-pager-wrap >.k-link,
 .km-pane-wrapper .k-pager-wrap> .k-pager-info {
     padding: .571em .86em;
 }
+
+.km-pane-wrapper .k-pager-numbers .k-state-selected {
+    padding: .971em .86em .571em;
+}
+
+.km-pane-wrapper .k-pager-numbers .k-link {
+    min-width: 2.429em;
+}
+
 
 .k-ie7 input.k-textbox { 
     line-height: 2.694em;

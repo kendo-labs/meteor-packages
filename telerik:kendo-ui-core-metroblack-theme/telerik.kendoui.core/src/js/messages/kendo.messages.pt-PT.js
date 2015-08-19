@@ -17,6 +17,7 @@
     define([], f);
 })(function(){
 
+(function ($, undefined) {
 /* FlatColorPicker messages */
 
 if (kendo.ui.FlatColorPicker) {
@@ -294,6 +295,8 @@ $.extend(true, kendo.ui.Grid.prototype.options.messages,{
     "create": "Adicionar novo registo",
     "destroy": "Eliminar",
     "edit": "Editar",
+    "excel": "Export to Excel",
+    "pdf": "Export to PDF",
     "save": "Guardar alterações",
     "select": "Selecionar",
     "update": "Atualizar"
@@ -458,7 +461,9 @@ $.extend(true, kendo.ui.Scheduler.prototype.options.messages,{
   "deleteWindowTitle": "Eliminar evento",
   "ariaSlotLabel": "Selecionado entre {0:t} e {1:t}",
   "ariaEventLabel": "{0} em {1:D} às {2:t}",
-  "confirmation": "Tem a certeza que quer eliminar este evento?",
+  "editable": {
+    "confirmation": "Tem a certeza que quer eliminar este evento?"
+  },
   "views": {
     "day": "Dia",
     "week": "Semana",
@@ -552,6 +557,7 @@ $.extend(true, kendo.ui.Validator.prototype.options.messages,{
   "date": "{0} não é uma data válida"
 });
 }
+})(window.kendo.jQuery);
 
 
 return window.kendo;

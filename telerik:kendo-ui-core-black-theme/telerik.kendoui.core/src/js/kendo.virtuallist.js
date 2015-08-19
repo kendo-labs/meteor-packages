@@ -28,15 +28,15 @@
         VIRTUALLIST = "k-virtual-list",
         CONTENT = "k-virtual-content",
         LIST = "k-list",
-        HEADER = "k-virtual-header",
+        HEADER = "k-group-header",
         VIRTUALITEM = "k-virtual-item",
         ITEM = "k-item",
-        OPTIONLABEL = "k-virtual-option-label",
         HEIGHTCONTAINER = "k-height-container",
         GROUPITEM = "k-group",
 
         SELECTED = "k-state-selected",
         FOCUSED = "k-state-focused",
+        HOVER = "k-state-hover",
         CHANGE = "change",
         CLICK = "click",
         LISTBOUND = "listBound",
@@ -174,16 +174,16 @@
         element
             .attr("data-uid", data.item ? data.item.uid : "")
             .attr("data-offset-index", data.index)
-            .find("." + ITEM)
             .html(itemTemplate(data.item || {}));
 
         element.toggleClass(FOCUSED, data.current);
         element.toggleClass(SELECTED, data.selected);
         element.toggleClass("k-first", data.newGroup);
+        element.toggleClass("k-loading-item", !data.item);
 
-        if (data.newGroup) {
+        if (data.index !== 0 && data.newGroup) {
             $("<div class=" + GROUPITEM + "></div>")
-                .appendTo(element.find("." + ITEM))
+                .appendTo(element)
                 .html(templates.groupTemplate({ group: data.group }));
         }
 
@@ -196,6 +196,28 @@
         });
     }
 
+    function findChangedItems(selected, changed) {
+        var changedLength = changed.length;
+        var result = [];
+        var dataItem;
+        var i, j;
+
+        for (i = 0; i < selected.length; i++) {
+            dataItem = selected[i];
+
+            for (j = 0; j < changedLength; j++) {
+                if (dataItem === changed[j]) {
+                    result.push({
+                        index: i,
+                        item: dataItem
+                    });
+                }
+            }
+        }
+
+        return result;
+    }
+
     var VirtualList = DataBoundWidget.extend({
         init: function(element, options) {
             var that = this;
@@ -205,18 +227,19 @@
 
             Widget.fn.init.call(that, element, options);
 
-            element = that.element;
-            element.addClass(VIRTUALLIST);
-
             if (!that.options.itemHeight) {
                 that.options.itemHeight = getDefaultItemHeight();
             }
 
             options = that.options;
 
-            that.wrapper = element.wrap("<div class='" + WRAPPER + "' role='listbox'></div>").parent();
-            that.header = that.element.before("<div class='" + HEADER + "'></div>").prev();
-            that.content = element.append("<ul class='" + CONTENT + " " + LIST + "'></ul>").find("." + CONTENT);
+            that.element.addClass(LIST + " " + VIRTUALLIST).attr("role", "listbox");
+            that.content = that.element.wrap("<div unselectable='on' class='" + CONTENT + "'></div>").parent();
+            that.wrapper = that.content.wrap("<div class='" + WRAPPER + "'></div>").parent();
+            that.header = that.content.before("<div class='" + HEADER + "'></div>").prev();
+
+            that.element.on("mouseenter" + VIRTUAL_LIST_NS, "li:not(.k-loading-item)", function() { $(this).addClass(HOVER); })
+                        .on("mouseleave" + VIRTUAL_LIST_NS, "li", function() { $(this).removeClass(HOVER); });
 
             that._values = toArray(that.options.value);
             that._selectedDataItems = [];
@@ -228,9 +251,9 @@
 
             that.setDataSource(options.dataSource);
 
-            element.on("scroll" + VIRTUAL_LIST_NS, function() {
+            that.content.on("scroll" + VIRTUAL_LIST_NS, kendo.throttle(function() {
                 that._renderItems();
-            });
+            }, options.delay));
 
             that._selectable();
         },
@@ -238,6 +261,7 @@
         options: {
             name: "VirtualList",
             autoBind: true,
+            delay: 100,
             height: null,
             listScreens: 4,
             threshold: 0.5,
@@ -251,7 +275,6 @@
             placeholderTemplate: "loading...",
             groupTemplate: "#:group#",
             fixedGroupTemplate: "fixed header template",
-            optionLabel: null,
             valueMapper: null
         },
 
@@ -268,7 +291,7 @@
             Widget.fn.setOptions.call(this, options);
 
             if (this._selectProxy && this.options.selectable === false) {
-                this.wrapper.off(CLICK, "." + VIRTUALITEM + ", ." + OPTIONLABEL, this._selectProxy);
+                this.element.off(CLICK, "." + VIRTUALITEM, this._selectProxy);
             } else if (!this._selectProxy && this.options.selectable) {
                 this._selectable();
             }
@@ -282,21 +305,35 @@
 
         destroy: function() {
             this.wrapper.off(VIRTUAL_LIST_NS);
-            this.element.off(VIRTUAL_LIST_NS);
             this.dataSource.unbind(CHANGE, this._refreshHandler);
             Widget.fn.destroy.call(this);
         },
 
         setDataSource: function(source) {
-            var that = this,
-                dataSource = source || {};
+            var that = this;
+            var dataSource = source || {};
+            var value;
 
             dataSource = $.isArray(dataSource) ? {data: dataSource} : dataSource;
+            dataSource = kendo.data.DataSource.create(dataSource);
 
-            that.dataSource = kendo.data.DataSource.create(dataSource);
-            that._refreshHandler = $.proxy(that.refresh, that);
+            if (that.dataSource) {
+                that.dataSource.unbind(CHANGE, that._refreshHandler);
+                that.dataSource.unbind(CHANGE, that._rangeChangeHandler);
 
-            that.dataSource.bind(CHANGE, that._refreshHandler);
+                value = that.value();
+
+                that.value([]);
+                that.mute(function() {
+                    that.value(value);
+                });
+            } else {
+                that._refreshHandler = $.proxy(that.refresh, that);
+                that._rangeChangeHandler = $.proxy(that.rangeChange, that);
+            }
+
+            that.dataSource = dataSource.bind(CHANGE, that._refreshHandler)
+                                        .bind(CHANGE, that._rangeChangeHandler);
 
             if (that.dataSource.view().length !== 0) {
                 that.refresh();
@@ -305,58 +342,101 @@
             }
         },
 
-        refresh: function() {
+        rangeChange: function () {
             var that = this;
+            var page = that.dataSource.page();
+
+            if (that.isBound() && that._rangeChange === true && that._lastPage !== page) {
+                that._lastPage = page;
+                that.trigger(LISTBOUND);
+            }
+        },
+
+        refresh: function(e) {
+            var that = this;
+            var action = e && e.action;
+            var changedItems;
 
             if (that._mute) { return; }
 
             if (!that._fetching) {
-                that._createList();
-                if (that._values.length && !that._filter) {
-                    that._prefetchByValue(that._values);
+                if (that._filter) {
+                    that.focus(0);
                 }
-                that._listCreated = true;
-                that.trigger(LISTBOUND);
+
+                that._createList();
+                if (!action && that._values.length && !that._filter) {
+                    that.value(that._values, true).done(function() {
+                        that._lastPage = that.dataSource.page();
+                        that._listCreated = true;
+                        that.trigger(LISTBOUND);
+                    });
+                } else {
+                    that._lastPage = that.dataSource.page();
+                    that._listCreated = true;
+                    that.trigger(LISTBOUND);
+                }
             } else {
                 if (that._renderItems) {
                     that._renderItems(true);
                 }
-                //that.trigger(LISTBOUND);
+            }
+
+            if (action === "itemchange") {
+                changedItems = findChangedItems(that._selectedDataItems, e.items);
+                if (changedItems.length) {
+                    that.trigger("selectedItemChange", {
+                        items: changedItems
+                    });
+                }
             }
 
             that._fetching = false;
         },
 
-        value: function(value, silent) {
-            var that = this,
-                dataSource = that.dataSource,
-                deferred = $.Deferred();
+        removeAt: function(position) {
+            this._selectedIndexes.splice(position, 1);
+            this._values.splice(position, 1);
+
+            return {
+                position: position,
+                dataItem: this._selectedDataItems.splice(position, 1)[0]
+            };
+        },
+
+        setValue: function(value) {
+            this._values = toArray(value);
+        },
+
+        value: function(value, _forcePrefetch) {
+            var that = this;
+            var dataSource = that.dataSource;
 
             if (value === undefined) {
-                return that._values;
+                return that._values.slice();
             }
 
-            if (silent) {
-                that._values = value = toArray(value);
-                return;
-            }
+            value = toArray(value);
 
-            if (value === "" || value === null) {
-                value = [];
-            }
-
-            if (value instanceof Array && !value.length) {
+            if (that.options.selectable === "multiple" && that.select().length && value.length) {
                 that.select(-1);
-                return;
             }
 
-            that._selectedDataItems = [];
-            that._selectedIndexes = [];
-            that._values = value = toArray(value);
+            if (!that._valueDeferred || that._valueDeferred.state() === "resolved") {
+                that._valueDeferred = $.Deferred();
+            }
 
-            if (that.isBound()) {
+            if (!value.length) {
+                that.select(-1);
+            }
+
+            that._values = value;
+
+            if ((that.isBound() && !that._mute) || _forcePrefetch) {
                 that._prefetchByValue(value);
             }
+
+            return that._valueDeferred;
         },
 
         _prefetchByValue: function(value) {
@@ -392,7 +472,16 @@
                     value: (this.options.selectable === "multiple") ? value : value[0],
                     success: function(indexes) {
                         that._values = [];
-                        that.select(toArray(indexes));
+                        that._selectedIndexes = [];
+                        that._selectedDataItems = [];
+
+                        indexes = toArray(indexes);
+
+                        if (!indexes.length) {
+                            indexes = [-1];
+                        }
+
+                        that.select(indexes);
                     }
                 });
             } else {
@@ -457,14 +546,13 @@
 
             if (isEmptyList) {
                 $.when.apply($, that._promisesList).done(function() {
-                    //that._renderItems(true);
                     that._activeDeferred.resolve();
                     that._activeDeferred = null;
                     that._promisesList = [];
                 });
             }
 
-            return this._activeDeferred;
+            return that._activeDeferred;
         },
 
         _findDataItem: function(index) {
@@ -475,7 +563,7 @@
             if (this.options.type === "group") {
                 for (var i = 0; i < view.length; i++) {
                     group = view[i].items;
-                    if (group.length < index) {
+                    if (group.length <= index) {
                         index = index - group.length;
                     } else {
                         return group[index];
@@ -488,11 +576,11 @@
         },
 
         selectedDataItems: function() {
-            return this._selectedDataItems;
+            return this._selectedDataItems.slice();
         },
 
         scrollTo: function(y) {
-            this.element.scrollTop(y); //works only if the element is visible
+            this.content.scrollTop(y); //works only if the element is visible
         },
 
         scrollToIndex: function(index) {
@@ -506,15 +594,16 @@
                 dataSource = this.dataSource,
                 current,
                 itemHeight = this.options.itemHeight,
-                id = this._optionID;
+                id = this._optionID,
+                triggerEvent = true;
 
             if (candidate === undefined) {
-                current = this.content.find("." + FOCUSED);
+                current = this.element.find("." + FOCUSED);
                 return current.length ? current : null;
             }
 
             if (typeof candidate === "function") {
-                data = this.data();
+                data = this.dataSource.flatView();
                 for (var idx = 0; idx < data.length; idx++) {
                     if (candidate(data[idx])) {
                         candidate = idx;
@@ -535,46 +624,55 @@
                 element = this._getElementByIndex(index);
             }
 
-            if (index === -1) { //this will be in conflict with the optionLabel
-                this.content.find("." + FOCUSED).removeClass(FOCUSED);
+            if (index === -1) {
+                this.element.find("." + FOCUSED).removeClass(FOCUSED);
                 this._focusedIndex = undefined;
                 return;
             }
 
             if (element.length) { /*focus rendered item*/
                 if (element.hasClass(FOCUSED)) {
-                    return;
-                } else {
-                    if (this._focusedIndex !== undefined) {
-                        current = this._getElementByIndex(this._focusedIndex);
-                        current
-                            .removeClass(FOCUSED)
-                            .removeAttr("id");
+                    triggerEvent = false;
+                }
+                if (this._focusedIndex !== undefined) {
+                    current = this._getElementByIndex(this._focusedIndex);
+                    current
+                        .removeClass(FOCUSED)
+                        .removeAttr("id");
 
+                    if (triggerEvent) {
                         this.trigger(DEACTIVATE);
                     }
+                }
 
-                    this._focusedIndex = index;
+                this._focusedIndex = index;
 
-                    element
-                        .addClass(FOCUSED)
-                        .attr("id", id);
+                element
+                    .addClass(FOCUSED)
+                    .attr("id", id);
 
-                    var position = this._getElementLocation(index);
+                var position = this._getElementLocation(index);
 
-                    if (position === "top") {
-                        this.scrollTo(index * itemHeight);
-                    } else if (position === "bottom") {
-                        this.scrollTo((index * itemHeight + itemHeight) - this.screenHeight);
-                    }
+                if (position === "top") {
+                    this.scrollTo(index * itemHeight);
+                } else if (position === "bottom") {
+                    this.scrollTo((index * itemHeight + itemHeight) - this.screenHeight);
+                } else if (position === "outScreen") {
+                    this.scrollTo(index * itemHeight);
+                }
 
+                if (triggerEvent) {
                     this.trigger(ACTIVATE);
                 }
             } else { /*focus non rendered item*/
                 this._focusedIndex = index;
-                this.items().add(this.optionLabel).removeClass(FOCUSED);
+                this.items().removeClass(FOCUSED);
                 this.scrollToIndex(index);
             }
+        },
+
+        focusIndex: function() {
+            return this._focusedIndex;
         },
 
         first: function() {
@@ -590,94 +688,100 @@
 
         prev: function() {
             var index = this._focusedIndex;
+            var current;
 
             if (!isNaN(index) && index > 0) {
-                this.focus(index - 1);
-                return index - 1;
+                index -= 1;
+                this.focus(index);
+
+                current = this.focus();
+                if (current && current.hasClass("k-loading-item")) {
+                    index += 1;
+                    this.focus(index);
+                }
+
+                return index;
             }
         },
 
         next: function() {
-            var index = this._focusedIndex,
-                lastIndex = this.dataSource.total() - 1; /* data offset index starts from 0*/
+            var index = this._focusedIndex;
+            var lastIndex = this.dataSource.total() - 1;
+            var current;
 
             if (!isNaN(index) && index < lastIndex) {
-                this.focus(index + 1);
-                return index + 1;
+                index += 1;
+                this.focus(index);
+
+                current = this.focus();
+                if (current && current.hasClass("k-loading-item")) {
+                    index -= 1;
+                    this.focus(index);
+                }
+
+                return index;
             }
         },
 
         select: function(candidate) {
-            var that = this;
-            var indexes,
-                singleSelection = this.options.selectable !== "multiple",
-                prefetchStarted = !!this._activeDeferred,
+            var that = this,
+                indices,
+                singleSelection = that.options.selectable !== "multiple",
+                prefetchStarted = !!that._activeDeferred,
                 deferred,
                 added = [],
                 removed = [];
 
             if (candidate === undefined) {
-                return this._selectedIndexes.slice();
+                return that._selectedIndexes.slice();
             }
 
-            indexes = this._getIndecies(candidate);
+            indices = that._getIndecies(candidate);
 
-            if (!indexes.length || (singleSelection && lastFrom(indexes) === lastFrom(this._selectedIndexes))) { return; }
-
-            removed = this._deselect(indexes);
-
-            if (!indexes.length) {
-                this.trigger(CHANGE, {
-                    added: added,
-                    removed: removed
-                });
-            } else {
-                if (singleSelection) {
-                    this._activeDeferred = null;
-                    prefetchStarted = false;
-                    indexes = [lastFrom(indexes)];
-                }
-
-                var done = function() {
-                    added = that._select(indexes); //???
-                    that.focus(indexes);
-
-                    if (added.length || removed.length) {
-                        that.trigger(CHANGE, {
-                            added: added,
-                            removed: removed
-                        });
-                    }
-                };
-
-                deferred = this.prefetch(indexes);
-
-                if (!prefetchStarted) {
-                    if (deferred) {
-                        deferred.done(done);
-                    } else {
-                        done();
-                    }
-                }
-            }
-        },
-
-        data: function() {
-            var data = this.dataSource.view(),
-                first = this.optionInstance,
-                length = data.length,
-                idx = 0;
-
-            if (first && length) {
-                first = new kendo.data.ObservableArray([first]);
-
-                for (; idx < length; idx++) {
-                    first.push(data[idx]);
-                }
-                data = first;
+            if (that._filter && !singleSelection && that._deselectFiltered(indices)) {
+                return;
             }
 
-            return data;
+            if (!indices.length || (singleSelection && !that._filter && lastFrom(indices) === lastFrom(this._selectedIndexes))) {
+                return;
+            }
+
+            removed = that._deselect(indices);
+
+            if (singleSelection) {
+                that._activeDeferred = null;
+                prefetchStarted = false;
+                if (indices.length) {
+                    indices = [lastFrom(indices)];
+                }
+            }
+
+            var done = function() {
+                var added = that._select(indices);
+
+                that.focus(indices);
+
+                if (added.length || removed.length) {
+                    that.trigger(CHANGE, {
+                        added: added,
+                        removed: removed
+                    });
+                }
+
+                if (that._valueDeferred) {
+                    that._valueDeferred.resolve();
+                }
+            };
+
+            deferred = that.prefetch(indices);
+
+            if (!prefetchStarted) {
+                if (deferred) {
+                    deferred.done(done);
+                } else {
+                    done();
+                }
+            }
         },
 
         isBound: function() {
@@ -694,52 +798,54 @@
             if (filter === undefined) {
                 return this._filter;
             }
+
             this._filter = filter;
+            this._rangeChange = true;
         },
 
-        clearIndices: function() {
-            this._selectedIndexes = [];
-        },
+        skipUpdate: $.noop,
 
         _getElementByIndex: function(index) {
-            var element;
-
-            if (index === -1) {
-                element = this.optionLabel;
-            } else {
-                element = this.items().filter(function(idx, element) {
-                    return index === parseInt($(element).attr("data-offset-index"), 10);
-                });
-            }
-
-            return element;
+            return this.items().filter(function(idx, element) {
+                return index === parseInt($(element).attr("data-offset-index"), 10);
+            });
         },
 
         _clean: function() {
             this.result = undefined;
             this._lastScrollTop = undefined;
-            if (this.optionLabel) {
-                this.optionLabel.parent().remove();
-                this.optionLabel = undefined;
+            this._lastPage = undefined;
+            $(this.heightContainer).remove();
+            this.heightContainer = undefined;
+            this.element.empty();
+        },
+
+        _height: function() {
+            var hasData = !!this.dataSource.view().length,
+                height = this.options.height,
+                itemHeight = this.options.itemHeight,
+                total = this.dataSource.total();
+
+            if (!hasData) {
+                height = 0;
+            } else if (height/itemHeight > total) {
+                height = total * itemHeight;
             }
-            this.content.empty();
+
+            return height;
         },
 
         _screenHeight: function() {
-            var height = this.options.height,
-                element = this.element;
+            var height = this._height(),
+                element = this.element,
+                content = this.content;
 
-            if (height) {
-                element.height(height);
-            } else {
-                height = element.height();
-            }
-
+            content.height(height);
             this.screenHeight = height;
         },
 
         _getElementLocation: function(index) {
-            var scrollTop = this.element.scrollTop(),
+            var scrollTop = this.content.scrollTop(),
                 screenHeight = this.screenHeight,
                 itemHeight = this.options.itemHeight,
                 yPosition = index * itemHeight,
@@ -779,14 +885,16 @@
 
         _generateItems: function(element, count) {
             var items = [],
-                item;
+                item,
+                itemHeight = this.options.itemHeight + "px";
 
             while(count-- > 0) {
                 item = document.createElement("li");
                 item.tabIndex = -1;
-                item.className = VIRTUALITEM;
+                item.className = VIRTUALITEM + " " + ITEM;
                 item.setAttribute("role", "option");
-                item.innerHTML = "<div class='" + ITEM + "'></div>";
+                item.style.height = itemHeight;
+                item.style.minHeight = itemHeight;
                 element.appendChild(item);
 
                 items.push(item);
@@ -808,7 +916,7 @@
 
         _createList: function() {
             var that = this,
-                element = that.element.get(0),
+                content = that.content.get(0),
                 options = that.options,
                 dataSource = that.dataSource,
                 total = dataSource.total();
@@ -827,11 +935,16 @@
             }
 
             that._templates();
-            that._optionLabel();
-            that._items = that._generateItems(that.content[0], that.itemCount);
+            that._items = that._generateItems(that.element[0], that.itemCount);
 
             that._setHeight(options.itemHeight * dataSource.total());
-            that.options.type = !!dataSource.group().length ? "group" : "flat";
+            that.options.type = (dataSource.group() || []).length ? "group" : "flat";
+
+            if (that.options.type === "flat") {
+                that.header.hide();
+            } else {
+                that.header.show();
+            }
 
             that.getter = that._getter(function() {
                 that._renderItems(true);
@@ -843,11 +956,12 @@
             };
 
             that._renderItems = that._whenChanged(
-                scrollCallback(element, that._onScroll),
+                scrollCallback(content, that._onScroll),
                 syncList(that._reorderList(that._items, $.proxy(render, that)))
             );
 
             that._renderItems();
+            that._calculateGroupPadding(that.screenHeight);
         },
 
         _setHeight: function(height) {
@@ -855,7 +969,7 @@
                 heightContainer = this.heightContainer;
 
             if (!heightContainer) {
-                heightContainer = this.heightContainer = appendChild(this.element[0], HEIGHTCONTAINER);
+                heightContainer = this.heightContainer = appendChild(this.content[0], HEIGHTCONTAINER);
             } else {
                 currentHeight = heightContainer.offsetHeight;
             }
@@ -885,21 +999,40 @@
                     if (lastRequestedRange !== rangeStart) {
                         lastRequestedRange = rangeStart;
                         lastRangeStart = rangeStart;
-                        this._fetching = true;
-                        this.deferredRange(rangeStart).then(function() {
-                            that._fetching = true;
-                            dataSource.range(rangeStart, pageSize);
+                        that._fetching = true;
+
+                        if (that._getterDeferred) {
+                            that._getterDeferred.reject();
+                        }
+
+                        that._getterDeferred = that.deferredRange(rangeStart);
+                        that._getterDeferred.then(function() {
+                            var firstItemIndex = that._indexConstraint(that.content[0].scrollTop);
+
+                            that._getterDeferred = null;
+
+                            if (rangeStart <= firstItemIndex && firstItemIndex <= (rangeStart + pageSize)) {
+                                that._fetching = true;
+                                that._rangeChange = true;
+                                dataSource.range(rangeStart, pageSize);
+                                that._rangeChange = false;
+                            }
                         });
                     }
 
                     return null;
                 } else {
                     if (lastRangeStart !== rangeStart) {
-                        this._mute = true;
-                        this._fetching = true;
+                        that._mute = true;
+                        that._fetching = true;
+                        that._rangeChange = true;
+
                         dataSource.range(rangeStart, pageSize);
                         lastRangeStart = rangeStart;
-                        this._mute = false;
+
+                        that._rangeChange = false;
+                        that._fetching = false;
+                        that._mute = false;
                     }
 
                     var result;
@@ -935,8 +1068,7 @@
                 var firstVisibleGroup = firstVisibleDataItem.group;
 
                 if (firstVisibleGroup !== group) {
-                    this.header[0].innerHTML = "";
-                    appendChild(this.header[0], GROUPITEM).innerHTML = firstVisibleGroup;
+                    this.header[0].innerHTML = firstVisibleGroup || "";
                     this.currentVisibleGroup = firstVisibleGroup;
                 }
             }
@@ -944,10 +1076,9 @@
             return list;
         },
 
-        _itemMapper: function(item, index) {
+        _itemMapper: function(item, index, value) {
             var listType = this.options.type,
                 itemHeight = this.options.itemHeight,
-                value = this._values,
                 currentIndex = this._focusedIndex,
                 selected = false,
                 current = false,
@@ -971,6 +1102,7 @@
                 for (var i = 0; i < value.length; i++) {
                     match = isPrimitive(item) ? value[i] === item : value[i] === valueGetter(item);
                     if (match) {
+                        value.splice(i , 1);
                         selected = true;
                         break;
                     }
@@ -994,6 +1126,7 @@
 
         _range: function(index) {
             var itemCount = this.itemCount,
+                value = this._values.slice(),
                 items = [],
                 item;
 
@@ -1001,7 +1134,7 @@
             this._currentGroup = null;
 
             for (var i = index, length = index + itemCount; i < length; i++) {
-                item = this._itemMapper(this.getter(i, index), i);
+                item = this._itemMapper(this.getter(i, index), i, value);
                 items.push(item);
                 this._view[item.index] = item;
             }
@@ -1089,7 +1222,7 @@
                 itemHeight = this.options.itemHeight,
                 total = this.dataSource.total();
 
-            return Math.min(total - itemCount, Math.max(0, Math.floor(position / itemHeight )));
+            return Math.min(Math.max(total - itemCount, 0), Math.max(0, Math.floor(position / itemHeight )));
         },
 
         _listIndex: function(scrollTop, lastScrollTop) {
@@ -1104,7 +1237,7 @@
         _selectable: function() {
             if (this.options.selectable) {
                 this._selectProxy = $.proxy(this, "_clickHandler");
-                this.wrapper.on(CLICK + VIRTUAL_LIST_NS, "." + VIRTUALITEM + ", ." + OPTIONLABEL, this._selectProxy);
+                this.element.on(CLICK + VIRTUAL_LIST_NS, "." + VIRTUALITEM, this._selectProxy);
             }
         },
 
@@ -1112,7 +1245,7 @@
             var result = [], data;
 
             if (typeof candidate === "function") {
-                data = this.data();
+                data = this.dataSource.flatView();
                 for (var idx = 0; idx < data.length; idx++) {
                     if (candidate(data[idx])) {
                         result.push(idx);
@@ -1147,11 +1280,14 @@
                 selectedIndexes = this._selectedIndexes,
                 position = 0,
                 selectable = this.options.selectable,
-                removedindexesCounter = 0;
+                removedindexesCounter = 0,
+                item;
 
             if (indexes[position] === -1) { //deselect everything
                 for (var idx = 0; idx < selectedIndexes.length; idx++) {
                     selectedIndex = selectedIndexes[idx];
+
+                    this._getElementByIndex(selectedIndex).removeClass(SELECTED);
 
                     removed.push({
                         index: selectedIndex,
@@ -1191,10 +1327,16 @@
                     selectedIndex = selectedIndexes[position];
 
                     if (selectedIndex !== undefined) {
-                        this._getElementByIndex(selectedIndex).removeClass(SELECTED);
+                        item = this._getElementByIndex(selectedIndex);
+
+                        if (!item.hasClass("k-state-selected")) {
+                            continue;
+                        }
+
+                        item.removeClass(SELECTED);
                         this._values.splice(position, 1);
                         this._selectedIndexes.splice(position, 1);
-                        dataItem = this._selectedDataItems.splice(position, 1);
+                        dataItem = this._selectedDataItems.splice(position, 1)[0];
 
                         indexes.splice(i, 1);
 
@@ -1211,6 +1353,44 @@
             }
 
             return removed;
+        },
+
+        _deselectFiltered: function(indices) {
+            var children = this.element[0].children;
+            var value, index, position;
+            var values = this._values;
+            var removed = [];
+            var idx = 0;
+            var j;
+
+            for (; idx < indices.length; idx++) {
+                position = -1;
+                index = indices[idx];
+                value = this._valueGetter(this._view[index].item);
+
+                for (j = 0; j < values.length; j++) {
+                    if (value == values[j]) {
+                        position = j;
+                        break;
+                    }
+                }
+
+                if (position > -1) {
+                    removed.push(this.removeAt(position));
+                    $(children[index]).removeClass("k-state-selected");
+                }
+            }
+
+            if (removed.length) {
+                this.trigger("change", {
+                    added: [],
+                    removed: removed
+                });
+
+                return true;
+            }
+
+            return false;
         },
 
         _select: function(indexes) {
@@ -1258,29 +1438,31 @@
         },
 
         _clickHandler: function(e) {
-            if (!e.isDefaultPrevented()) {
-                this.trigger(CLICK, { item: $(e.currentTarget) });
+            var item = $(e.currentTarget);
+
+            if (!e.isDefaultPrevented() && item.attr("data-uid")) {
+                this.trigger(CLICK, { item: item });
             }
-        },
-
-        _optionLabel: function() {
-            var optionInstance = this.options.optionLabel;
-
-            if (optionInstance && typeof optionInstance === "object") {
-                this.element
-                    .before("<ul class='" + LIST + "'><li tabindex='-1' class='" + OPTIONLABEL + "' role='option'><div class='" + ITEM + "'></div></li></ul>");
-
-                this.optionLabel = this.wrapper.find("." + OPTIONLABEL);
-                render.call(this, this.optionLabel, { index: -1, top: null, selected: false, current: false, item: optionInstance }, this.templates);
-                this.optionInstance = optionInstance;
-            } else {
-                this.optionInstance = null;
-            }
-
         },
 
         _buildValueGetter: function() {
             this._valueGetter = kendo.getter(this.options.dataValueField);
+        },
+
+        _calculateGroupPadding: function(height) {
+            var firstItem = this.items().first(),
+                groupHeader = this.header,
+                padding = 0;
+
+            if (groupHeader[0] && groupHeader[0].style.display !== "none") {
+                if (height !== "auto") {
+                    padding = kendo.support.scrollbar();
+                }
+
+                padding += parseFloat(firstItem.css("border-right-width"), 10) + parseFloat(firstItem.children(".k-group").css("right"), 10);
+
+                groupHeader.css("padding-right", padding);
+            }
         }
 
     });

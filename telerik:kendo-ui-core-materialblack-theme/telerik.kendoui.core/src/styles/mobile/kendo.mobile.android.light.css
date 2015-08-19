@@ -29,6 +29,11 @@
 .km-root {
   font-size: .92em;
 }
+.km-root.km-retina input,
+.km-root.km-retina select,
+.km-root.km-retina textarea {
+  font-size: 1em;
+}
 .km-root a {
   color: inherit;
 }
@@ -1663,6 +1668,10 @@ div.km-split-horizontal > .km-content > .km-pane {
 .km-auto-height .km-content {
   -ms-flex: auto;
 }
+.km-native-scrolling .km-view.km-modalview {
+  display: -webkit-inline-flex;
+  display: inline-flex;
+}
 .km-modalview-root:before,
 .km-modalview-wrapper:before {
   vertical-align: middle;
@@ -2718,6 +2727,10 @@ body:before {
 .km-wifi:after,
 .km-wifi:before {
   content: "\e0f0";
+}
+.km-drawer-icon:after,
+.km-drawer-icon:before {
+  content: "\e105";
 }
 .km-root .km-pane .km-icon.km-check {
   -webkit-background-clip: initial;
